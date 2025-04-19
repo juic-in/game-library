@@ -1,27 +1,43 @@
 import fs from 'fs';
 import path from 'path';
+import { DataStore } from '../interface';
 
-const DATA_FILE = path.join(__dirname, '');
+const DATA_FILE = path.join(__dirname, 'data.json');
 
-let data = {};
+let data: DataStore = {
+  users: [],
+  games: [],
+  sessions: [],
+};
+
 
 export function save() {
-  const dataJson = JSON.stringify(data, null, 2);
-  fs.writeFileSync(DATA_FILE, dataJson, 'utf8');
+  try {
+    const dataJson = JSON.stringify(data, null, 2);
+    fs.writeFileSync(DATA_FILE, dataJson, 'utf8');
+  }  catch (e) {
+    console.error('Error saving data:', e);
+  }
 }
 
 export function load() {
-  if (!fs.existsSync(DATA_FILE)) {
-    save();
-    return;
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = fs.readFileSync(DATA_FILE, 'utf-8');
+      const parsedData = JSON.parse(data.toString())
+      setData(parsedData);
+    } else {
+      save();
+    }
+  } catch (e) {
+    console.error('Error loading data:', e);
   }
-  const data = fs.readFileSync(DATA_FILE, 'utf-8');
-  const parsedData = JSON.parse(data.toString())
-  setData(parsedData);
 }
 
 export const getData = () => data;
 
-export const setData(newData) {
-  data = newData;
+export const setData = (newData) => {
+  if (!newData) {
+    data = newData;
+  }
 }
