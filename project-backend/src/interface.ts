@@ -1,15 +1,77 @@
 export interface User {
-  userId: number;
+  userId: string;
   email: string;
-  session: string[];
   nameFirst: string;
   nameLast: string;
-  ownedGames: Game[];
+  ownedGames: UserOwnedGameData[];
+  wishlist: UserWishedGameData[];
+  friends: User[];
+  timeJoined: number;
+  lastLogin: number;
+  profilePicture?: string;
+  description?: string;
 }
 
 export interface Game {
-  gameId: number;
-  owned: boolean;
+  gameId: string;
   rating?: number;
-  
+  reviews?: string[];
+  name: string;
+  description: string;
+  image?: string;
+  priceCents: number;
+  releaseDate: string;
+  developer: string;
+  publisher: string;
+  genres?: string[];
+  platforms?: string[];
+  tags?: string[];
+  reviewsCount?: number;
+  ratingCount?: number;
+}
+
+export interface GameId {
+  gameId: string;
+}
+
+export interface Session {
+  sessionId: string;
+  userId: string;
+  token: string;
+  expires: number;
+  timeLoggedIn: number;
+}
+
+export interface DataStore {
+  users: User[];
+  games: Game[];
+  sessions: Session[];
+}
+
+export interface UserProfile {
+  nameFirst: string;
+  nameLast: string;
+  email: string;
+  ownedGames: Game[];
+  wishlist: Game[];
+  friends: User[];
+}
+
+export interface UserOwnedGameData {
+  gameId: string;
+  name: string;
+  description: string;
+  timeOwned: number;
+  playtime?: number;
+  lastPlayed?: number;
+  rating?: number;
+  reviews?: string[];  
+}
+
+export interface UserWishedGameData {
+  gameId: string;
+  name: string;
+  description: string;
+  timeWishListed: number;
+  reviews: undefined
 }
