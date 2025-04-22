@@ -1,5 +1,12 @@
-import { addGame, findGameById, findGameByNameAndReleaseDate, updateGame } from './data/db/gameModel';
+
 import { BadRequestError } from './errors';
+import {
+  addGame,
+  updateGame,
+  findGameById,
+  findGameByNameAndReleaseDate,
+} from './data/db/game';
+
 
 export const adminAddGame = async (game: {
   name: string;
@@ -14,9 +21,14 @@ export const adminAddGame = async (game: {
   tags?: string[];
 }) => {
   const releaseDate = game.releaseDate || new Date().toISOString();
-  const existingGame = await findGameByNameAndReleaseDate(game.name, releaseDate);
+  const existingGame = await findGameByNameAndReleaseDate(
+    game.name,
+    releaseDate
+  );
   if (existingGame) {
-    throw new BadRequestError(`Game with the same name and release date already exists.`);
+    throw new BadRequestError(
+      `Game with the same name and release date already exists.`
+    );
   }
 
   const result = await addGame(game);
@@ -48,3 +60,5 @@ export const adminUpdateGame = async (
 
   return { gameId };
 };
+
+

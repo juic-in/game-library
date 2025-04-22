@@ -1,11 +1,6 @@
 import express from 'express';
 import { connectToDatabase } from './data/db/dbConnection';
 import { adminAddGame, adminUpdateGame } from './gamelib';
-import dotenv from 'dotenv';
-
-dotenv.config();
-const dbUri = process.env.DB_URI;
-const dbName = process.env.DB_NAME;
 
 const app = express();
 app.use(express.json());
@@ -19,7 +14,9 @@ connectToDatabase().then(() => {
       const { gameId } = await adminAddGame(gameData);
       res.status(200).json({ gameId });
     } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
+      const statusCode = (error instanceof Error && 'statusCode' in error) ? (error as any).statusCode : 500;
+      const message = (error instanceof Error) ? error.message : 'An unknown error occurred';
+      res.status(statusCode).json({ error: message });
     }
   });
 
@@ -30,11 +27,13 @@ connectToDatabase().then(() => {
       await adminUpdateGame(gameId, gameData);
       res.status(200).json({ gameId });
     } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
+      const statusCode = (error instanceof Error && 'statusCode' in error) ? (error as any).statusCode : 500;
+      const message = (error instanceof Error) ? error.message : 'An unknown error occurred';
+      res.status(statusCode).json({ error: message });
     }
   });
 
   app.listen(3000, () => {
-    console.log("Server is running");
+    console.log('Server is running');
   });
 });

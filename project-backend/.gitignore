@@ -7,9 +7,6 @@ dist/
 # Ignore environment variables file
 .env
 
-# Ignore database files
-src/data/db/
-
 # Ignore logs
 *.log
 
