@@ -1,4 +1,7 @@
-import e from 'express';
+/**
+ * This file interacts directly with the database for any game related data
+ */
+
 import GameModel from '../models/GameModel';
 import { Types } from 'mongoose';
 
@@ -44,3 +47,7 @@ export const findGameByNameAndReleaseDate = async (
   }
   return game;
 };
+
+export const getAllGames = async () => {
+  return await GameModel.find({});
+}
