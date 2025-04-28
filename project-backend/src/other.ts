@@ -1,5 +1,5 @@
-import { nanoid } from "nanoid";
+import GameModel from './data/models/GameModel';
 
-export function generateUniqueId(): string {
-  return nanoid();
+export async function clear() {
+  await GameModel.deleteMany({});
 }
