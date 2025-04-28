@@ -1,10 +1,17 @@
 import express, { json, Request, Response } from 'express';
 import { connectToDatabase } from './data/db/dbConnection';
-import { adminAddGame, adminDeleteGame, adminUpdateGame } from './gamelib';
+import {
+  adminAddGame,
+  adminDeleteGame,
+  adminGameInfo,
+  adminGamesList,
+  adminUpdateGame,
+} from './gamelib';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
 import { clear } from './other';
+import { error } from 'console';
 
 const app = express();
 app.use(express.json());
@@ -23,16 +30,18 @@ connectToDatabase().then(() => {
       await clear();
       res.status(200).json({});
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ success: false, error: error.message });
     }
   });
   app.post('/api/games', async (req: Request, res: Response) => {
     try {
       const gameData = req.body;
       const { gameId } = await adminAddGame(gameData);
-      res.status(200).json({ gameId });
+      res.status(200).json({ success: true, payload: { gameId } });
     } catch (error) {
-      res.status(error.statusCode || 400).json({ error: error.message });
+      res
+        .status(error.statusCode || 500)
+        .json({ success: false, error: error.message });
     }
   });
 
@@ -40,10 +49,12 @@ connectToDatabase().then(() => {
     try {
       const { gameId } = req.params;
       const gameData = req.body;
-      await adminUpdateGame(gameId, gameData);
-      res.status(200).json({ gameId });
+      const result = await adminUpdateGame(gameId, gameData);
+      res.status(200).json({ success: true, payload: { result } });
     } catch (error) {
-      res.status(error.statusCode).json({ error: error.message });
+      res
+        .status(error.statusCode || 500)
+        .json({ success: false, error: error.message });
     }
   });
 
@@ -51,9 +62,34 @@ connectToDatabase().then(() => {
     try {
       const { gameId } = req.params;
       const result = await adminDeleteGame(gameId);
-      res.json(200).json(result);
+      res.json(200).json({ success: true, payload: { result } });
     } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
+      res
+        .status(error.statusCode || 500)
+        .json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/games/list', async (req: Request, res: Response) => {
+    try {
+      const result = await adminGamesList();
+      res.status(200).json({ success: true, payload: { result } });
+    } catch (error) {
+      res
+        .status(error.statusCode || 500)
+        .json({ success: false, error: error.message });
+    }
+  });
+
+  app.get('/api/games/:gameId', async (req: Request, res: Response) => {
+    try {
+      const { gameId } = req.body;
+      const result = await adminGameInfo(gameId);
+      res.status(200).json({ success: true, payload: { result } });
+    } catch (error) {
+      res
+        .status(error.statusCode || 500)
+        .json({ success: false, error: error.message });
     }
   });
 
