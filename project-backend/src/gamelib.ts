@@ -1,12 +1,12 @@
-
 import { BadRequestError } from './errors';
 import {
   addGame,
   updateGame,
   findGameById,
   findGameByNameAndReleaseDate,
+  deleteGameById,
 } from './data/db/game';
-
+import { validateGameDescription, validateGameName } from './utils/gameUtil';
 
 export const adminAddGame = async (game: {
   name: string;
@@ -23,12 +23,19 @@ export const adminAddGame = async (game: {
   const releaseDate = game.releaseDate || new Date().toISOString();
   const existingGame = await findGameByNameAndReleaseDate(
     game.name,
-    releaseDate
+    releaseDate,
+    false
   );
   if (existingGame) {
     throw new BadRequestError(
       `Game with the same name and release date already exists.`
     );
+  }
+  try {
+    validateGameName(game.name);
+    validateGameDescription(game.description);
+  } catch (error) {
+    throw new BadRequestError(error.message);
   }
 
   const result = await addGame(game);
@@ -55,10 +62,15 @@ export const adminUpdateGame = async (
   if (!existingGame) {
     throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
   }
-
   await updateGame(gameId, game);
-
   return { gameId };
 };
 
-
+export const adminDeleteGame = async (gameId: string) => {
+  const game = await deleteGameById(gameId);
+  if (!game)
+    throw new BadRequestError(
+      'GameId is invalid, does not map to an existing game'
+    );
+  return game;
+};
