@@ -5,7 +5,7 @@ export const validateGameName = (name: string) => {
   if (len < 3 || len > 100) throw new Error('Game name has to be within 3 and 100 characters in length')
 }
 
-export const validGameDesciption = (description: string) => {
+export const validateGameDescription = (description: string) => {
   const len = description.length
   if (len > 1000) throw new Error('Game description is too long, has to be less than 1000 characters')
 }
