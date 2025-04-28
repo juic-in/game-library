@@ -13,18 +13,23 @@ interface IGame extends Document {
   tags: string[];
 }
 
-const gameSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  genres: { type: [String], default: [] },
-  releaseDate: { type: String, required: true },
-  developer: { type: String, default: 'Unknown' },
-  publisher: { type: String, default: 'Unknown' },
-  image: { type: String, default: '' },
-  priceCents: { type: Number, default: 0 },
-  platforms: { type: [String], default: [] },
-  tags: { type: [String], default: [] },
-});
+const gameSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    genres: { type: [String], default: [] },
+    releaseDate: { type: Date, default: Date.now },
+    developer: { type: String, default: 'Unknown' },
+    publisher: { type: String, default: 'Unknown' },
+    image: { type: String, default: '' },
+    priceCents: { type: Number, default: 0 },
+    platforms: { type: [String], default: [] },
+    tags: { type: [String], default: [] },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const GameModel = mongoose.model<IGame>('Game', gameSchema);
 
