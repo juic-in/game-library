@@ -1,10 +1,11 @@
-import { BadRequestError } from './errors';
+import { BadRequestError, InternalServerError } from './errors';
 import {
   addGame,
   updateGame,
   findGameById,
   findGameByNameAndReleaseDate,
   deleteGameById,
+  getAllGames,
 } from './data/db/game';
 import { validateGameDescription, validateGameName } from './utils/gameUtil';
 
@@ -73,4 +74,24 @@ export const adminDeleteGame = async (gameId: string) => {
       'GameId is invalid, does not map to an existing game'
     );
   return game;
+};
+
+export const adminGamesList = async () => {
+  let result;
+  try {
+    result = getAllGames();
+  } catch (error) {
+    throw new InternalServerError('Could not find the Games collection');
+  }
+  return result;
+};
+
+export const adminGameInfo = async (gameId: string) => {
+  let result;
+  try {
+    result = await findGameById(gameId);
+  } catch (error) {
+    throw new BadRequestError(`There is no such game with a id of ${gameId}`);
+  }
+  return result;
 };
