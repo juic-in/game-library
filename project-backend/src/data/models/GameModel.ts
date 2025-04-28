@@ -16,7 +16,7 @@ interface IGame extends Document {
 const gameSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, required: true, default: '' },
     genres: { type: [String], default: [] },
     releaseDate: { type: Date, default: Date.now },
     developer: { type: String, default: 'Unknown' },
