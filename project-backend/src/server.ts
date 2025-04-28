@@ -1,17 +1,11 @@
 import express, { json, Request, Response } from 'express';
 import { connectToDatabase } from './data/db/dbConnection';
-import {
-  adminAddGame,
-  adminDeleteGame,
-  adminGameInfo,
-  adminGamesList,
-  adminUpdateGame,
-} from './gamelib';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
 import { clear } from './other';
-import { error } from 'console';
+import gameRoutes from './routes/game.route'
+
 
 const app = express();
 app.use(express.json());
@@ -33,65 +27,8 @@ connectToDatabase().then(() => {
       res.status(500).json({ success: false, error: error.message });
     }
   });
-  app.post('/api/games', async (req: Request, res: Response) => {
-    try {
-      const gameData = req.body;
-      const result = await adminAddGame(gameData);
-      res.status(200).json({ success: true, data: result });
-    } catch (error) {
-      res
-        .status(error.statusCode || 500)
-        .json({ success: false, error: error.message });
-    }
-  });
 
-  app.put('/api/games/:gameId', async (req: Request, res: Response) => {
-    try {
-      const { gameId } = req.params;
-      const gameData = req.body;
-      const result = await adminUpdateGame(gameId, gameData);
-      res.status(200).json({ success: true, data: result });
-    } catch (error) {
-      res
-        .status(error.statusCode || 500)
-        .json({ success: false, error: error.message });
-    }
-  });
-
-  app.delete('/api/games/:gameId', async (req: Request, res: Response) => {
-    try {
-      const { gameId } = req.params;
-      const result = await adminDeleteGame(gameId);
-      res.json(200).json({ success: true, data: result });
-    } catch (error) {
-      res
-        .status(error.statusCode || 500)
-        .json({ success: false, error: error.message });
-    }
-  });
-
-  app.get('/api/games/list', async (req: Request, res: Response) => {
-    try {
-      const result = await adminGamesList();
-      res.status(200).json({ success: true, data: result });
-    } catch (error) {
-      res
-        .status(error.statusCode || 500)
-        .json({ success: false, error: error.message });
-    }
-  });
-
-  app.get('/api/games/:gameId', async (req: Request, res: Response) => {
-    try {
-      const { gameId } = req.params;
-      const result = await adminGameInfo(gameId);
-      res.status(200).json({ success: true, data: result });
-    } catch (error) {
-      res
-        .status(error.statusCode || 500)
-        .json({ success: false, error: error.message });
-    }
-  });
+  app.use('/api/games', gameRoutes)
 
   app.use((req: Request, res: Response) => {
     const error = `

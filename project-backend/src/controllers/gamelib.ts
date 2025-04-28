@@ -1,4 +1,4 @@
-import { BadRequestError, InternalServerError } from './utils/errors';
+import { BadRequestError, InternalServerError } from '../utils/errors';
 import {
   addGame,
   updateGame,
@@ -6,8 +6,8 @@ import {
   findGameByNameAndReleaseDate,
   deleteGameById,
   getAllGames,
-} from './data/db/game';
-import { validateGameDescription, validateGameName } from './utils/gameUtil';
+} from '../data/db/game';
+import { validateGameDescription, validateGameName } from '../utils/gameUtil';
 
 export const adminAddGame = async (game: {
   name: string;
