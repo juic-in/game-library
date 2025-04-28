@@ -1,6 +1,5 @@
+import { BadRequestError } from '../utils/errors';
 import bcrypt from 'bcrypt';
-import { BadRequestError } from './errors';
-
 const users: Record<string, { passwordHash: string }> = {};
 
 // Function to register a new user
@@ -22,9 +21,9 @@ export async function registerUser(
 export async function loginUser(
   username: string,
   password: string,
-  session: string
+  session: any
 ): Promise<{ success: boolean; message: string }> {
-  const user = users[username];
+  const user: any = users[username];
   if (!user) {
     return { success: false, message: 'Invalid username or password' };
   }

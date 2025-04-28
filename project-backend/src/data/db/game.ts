@@ -2,7 +2,7 @@
  * This file interacts directly with the database for any game related data
  */
 
-import { NotFoundError } from '../../errors';
+import { NotFoundError } from '../../utils/errors';
 import GameModel from '../models/GameModel';
 import { Types } from 'mongoose';
 

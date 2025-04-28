@@ -1,4 +1,4 @@
-import { BadRequestError, InternalServerError } from './errors';
+import { BadRequestError, InternalServerError } from './utils/errors';
 import {
   addGame,
   updateGame,
@@ -63,12 +63,12 @@ export const adminUpdateGame = async (
     tags?: string[];
   }
 ) => {
-    const existingGame = await findGameById(gameId);
-    if (!existingGame) {
-      throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
-    }
-    await updateGame(gameId, game);
-    return {};
+  const existingGame = await findGameById(gameId);
+  if (!existingGame) {
+    throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
+  }
+  await updateGame(gameId, game);
+  return {};
 };
 
 export const adminDeleteGame = async (gameId: string) => {
