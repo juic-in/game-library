@@ -63,43 +63,36 @@ export const adminUpdateGame = async (
     tags?: string[];
   }
 ) => {
-  try {
     const existingGame = await findGameById(gameId);
-    if (!existingGame) throw new Error('hi');
+    if (!existingGame) {
+      throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
+    }
     await updateGame(gameId, game);
     return {};
-  } catch (error) {
-    throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
-  }
 };
 
 export const adminDeleteGame = async (gameId: string) => {
-  try {
-    const game = await deleteGameById(gameId);
-    if (!game) throw new Error('hi');
-    return game;
-  } catch (error) {
+  const game = await deleteGameById(gameId);
+  if (!game) {
     throw new BadRequestError(
       'GameId is invalid, does not map to an existing game'
     );
   }
+  return game;
 };
 
 export const adminGamesList = async () => {
-  try {
-    const result = getAllGames();
-    return result;
-  } catch (error) {
+  const result = getAllGames();
+  if (!result) {
     throw new InternalServerError('Could not find the Games collection');
   }
+  return result;
 };
 
 export const adminGameInfo = async (gameId: string) => {
-  try {
-    const result = await findGameById(gameId);
-    if (!result) throw new Error('hi')
-    return result;
-  } catch (error) {
+  const result = await findGameById(gameId);
+  if (!result) {
     throw new BadRequestError(`There is no such game with a id of ${gameId}`);
   }
+  return result;
 };

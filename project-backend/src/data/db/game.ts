@@ -2,6 +2,7 @@
  * This file interacts directly with the database for any game related data
  */
 
+import { NotFoundError } from '../../errors';
 import GameModel from '../models/GameModel';
 import { Types } from 'mongoose';
 
@@ -12,7 +13,8 @@ export const addGame = async (game: any) => {
 };
 
 export const updateGame = async (gameId: string, updateData: any) => {
-  if (!Types.ObjectId.isValid(gameId)) return null;
+  if (!Types.ObjectId.isValid(gameId))
+    throw new NotFoundError('Invalid Game Id');
 
   const updatedGame = await GameModel.findByIdAndUpdate(gameId, updateData, {
     new: true,
@@ -21,14 +23,16 @@ export const updateGame = async (gameId: string, updateData: any) => {
 };
 
 export const findGameById = async (gameId: string) => {
-  if (!Types.ObjectId.isValid(gameId)) return null;
+  if (!Types.ObjectId.isValid(gameId))
+    throw new NotFoundError('Invalid Game Id');
 
   const game = await GameModel.findById(gameId);
   return game;
 };
 
 export const deleteGameById = async (gameId: string) => {
-  if (!Types.ObjectId.isValid(gameId)) return null;
+  if (!Types.ObjectId.isValid(gameId))
+    throw new NotFoundError('Invalid Game Id');
 
   const deletedGame = await GameModel.findByIdAndDelete(gameId);
   return deletedGame;
@@ -50,4 +54,4 @@ export const findGameByNameAndReleaseDate = async (
 
 export const getAllGames = async () => {
   return await GameModel.find({});
-}
+};
