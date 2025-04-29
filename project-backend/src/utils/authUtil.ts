@@ -16,7 +16,6 @@ export const validateName = async (name: string) => {
     throw new BadRequestError(
       'Username has to be less than or equal to 20 character'
     );
-  
   else if (await findUserByUsername(name))
     throw new BadRequestError(`Sorry, ${name} is currently taken`);
 };
@@ -37,9 +36,10 @@ export const validatePassword = async (password: string) => {
     throw new BadRequestError('Password must contain a number');
   else if (!/[!@#$%^&*]/.test(password))
     throw new BadRequestError('Password must contain a special character');
-}
+};
 
 export const validateEmail = async (email: string) => {
+  if (!email) throw new BadRequestError('Please enter an email');
   if (!EmailValidator.validate(email))
     throw new BadRequestError(`${email} is not a valid email`);
   else if (await findUserByEmail(email))

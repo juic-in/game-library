@@ -38,4 +38,11 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.post('save', (doc, next) => {
+  console.log(
+    `[Log - ${new Date().toISOString()}] The user with the id of (${doc._id}) has been created/updated and saved`
+  );
+  next();
+});
+
 export const User = mongoose.model('User', userSchema);
