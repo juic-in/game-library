@@ -5,7 +5,7 @@
 // } from './interface';
 // import { getUserById } from './data/getdata';
 
-// export function userAddGameToWishlist(userId, gameId) {
+// export function userAddGameToWishlist(userId: string, gameId: string) {
 //   const user = getUserById(userId);
 //   if (!user.wishlist) {
 //     user.wishlist = [];
@@ -14,13 +14,13 @@
 //     user.wishlist.push(gameId);
 //   }
 // }
-// export function userRemoveGameFromWishlist(userId, gameId) {
+// export function userRemoveGameFromWishlist(userId: string, gameId: string) {
 //   const user = getUserById(userId);
 //   if (user.wishlist) {
 //     user.wishlist = user.wishlist.filter((g) => g !== gameId);
 //   }
 // }
-// export function userAddGameToOwnedGames(userId, gameId) {
+// export function userAddGameToOwnedGames(userId: string, gameId: string) {
 //   const user = getUserById(userId);
 //   if (!user.ownedGames) {
 //     user.ownedGames = [];
@@ -29,13 +29,13 @@
 //     user.ownedGames.push(gameId);
 //   }
 // }
-// export function userRemoveGameFromOwnedGames(userId, gameId) {
+// export function userRemoveGameFromOwnedGames(userId: string, gameId: string) {
 //   const user = getUserById(userId);
 //   if (user.ownedGames) {
 //     user.ownedGames = user.ownedGames.filter((g) => g !== gameId);
 //   }
 // }
-// export function userAddFriend(userId, friendId) {
+// export function userAddFriend(userId: string, friendId: string) {
 //   const user = getUserById(userId);
 //   const friend = getUserById(friendId);
 
@@ -46,13 +46,13 @@
 //     user.friends.push(friend);
 //   }
 // }
-// export function userRemoveFriend(userId, friend) {
+// export function userRemoveFriend(userId: string, friend: string) {
 //   const user = getUserById(userId);
 //   if (user.friends) {
 //     user.friends = user.friends.filter((f) => f !== friend);
 //   }
 // }
-// export function userUpdateProfile(userId, profile: UserProfile) {
+// export function userUpdateProfile(userId: string, profile: UserProfile) {
 //   const user = getUserById(userId);
 //   if (profile.nameFirst) {
 //     user.nameFirst = profile.nameFirst;
@@ -64,7 +64,7 @@
 //     user.email = profile.email;
 //   }
 // }
-// export function userGetProfile(userId) {
+// export function userGetProfile(userId: string) {
 //   const user = getUserById(userId);
 //   return {
 //     nameFirst: user.nameFirst,
@@ -75,21 +75,21 @@
 //     friends: user.friends,
 //   };
 // }
-// export function userGetOwnedGames(userId) {
+// export function userGetOwnedGames(userId: string) {
 //   const user = getUserById(userId);
 //   return user.ownedGames || [];
 // }
-// export function userGetWishlist(userId) {
+// export function userGetWishlist(userId: string) {
 //   const user = getUserById(userId);
 //   return user.wishlist || [];
 // }
-// export function userGetFriends(userId) {
+// export function userGetFriends(userId: string) {
 //   const user = getUserById(userId);
 //   return user.friends || [];
 // }
 // export function userGetGameDetails(
-//   userId,
-//   gameId
+//   userId: string,
+//   gameId: string
 // ): UserOwnedGameData | UserWishedGameData {
 //   const user = getUserById(userId);
 //   const game =
@@ -100,7 +100,7 @@
 //   }
 //   return game;
 // }
-// export function userGetGameReviews(userId, gameId) {
+// export function userGetGameReviews(userId: string, gameId: string) {
 //   const user = getUserById(userId);
 //   const game =
 //     user.ownedGames.find((g) => g.gameId === gameId) ||

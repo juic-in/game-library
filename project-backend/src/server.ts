@@ -3,9 +3,10 @@ import { connectToDatabase } from './data/db/dbConnection';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
-import { clear } from './other';
 import gameRoutes from './routes/game.route'
-
+import authRoutes from './routes/auth.route'
+// import userRoutes from './routes/user.route'
+import adminRoutes from './routes/admin.route'
 
 const app = express();
 app.use(express.json());
@@ -18,17 +19,12 @@ const HOST: string = process.env.IP || '127.0.0.1';
 const SERVER_URL: string = `${HOST}:${PORT}`;
 
 connectToDatabase().then(() => {
-  console.log('Connected to database');
-  app.delete('/api/admin/clear', async (req: Request, res: Response) => {
-    try {
-      await clear();
-      res.status(200).json({});
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
-  });
+  console.log('Connected to database\n');
 
-  app.use('/api/games', gameRoutes)
+  app.use('/api/admin/util', adminRoutes)
+  app.use('/api/admin/games', gameRoutes)
+  app.use('/api/user/auth', authRoutes)
+  // app.use('/api/user/games', userRoutes)
 
   app.use((req: Request, res: Response) => {
     const error = `

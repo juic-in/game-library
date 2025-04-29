@@ -1,4 +1,3 @@
-import { BadRequestError, InternalServerError } from '../utils/errors';
 import {
   addGame,
   updateGame,
@@ -6,21 +5,12 @@ import {
   findGameByNameAndReleaseDate,
   deleteGameById,
   getAllGames,
-} from '../data/db/game';
-import { validateGameDescription, validateGameName } from '../utils/gameUtil';
+} from '../../data/db/dbGame';
+import { BadRequestError, InternalServerError } from '../../utils/errors';
+import { validateGameDescription, validateGameName } from '../../utils/gameUtil';
+import { Game } from '../../utils/interface';
 
-export const adminAddGame = async (game: {
-  name: string;
-  description: string;
-  genres?: string[];
-  releaseDate?: string;
-  developer?: string;
-  publisher?: string;
-  image?: string;
-  priceCents?: number;
-  platforms?: string[];
-  tags?: string[];
-}) => {
+export const adminAddGame = async (game: Game) => {
   // TODO: Update this
   const releaseDate = game.releaseDate || new Date().toISOString();
   try {

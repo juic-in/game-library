@@ -3,11 +3,11 @@
  */
 
 import { NotFoundError } from '../../utils/errors';
-import GameModel from '../models/GameModel';
 import { Types } from 'mongoose';
+import { Game } from '../models/Game';
 
 export const addGame = async (game: any) => {
-  const newGame = new GameModel(game);
+  const newGame = new Game(game);
   await newGame.save();
   return newGame;
 };
@@ -16,7 +16,7 @@ export const updateGame = async (gameId: string, updateData: any) => {
   if (!Types.ObjectId.isValid(gameId))
     throw new NotFoundError('Invalid Game Id');
 
-  const updatedGame = await GameModel.findByIdAndUpdate(gameId, updateData, {
+  const updatedGame = await Game.findByIdAndUpdate(gameId, updateData, {
     new: true,
   });
   return updatedGame;
@@ -26,7 +26,7 @@ export const findGameById = async (gameId: string) => {
   if (!Types.ObjectId.isValid(gameId))
     throw new NotFoundError('Invalid Game Id');
 
-  const game = await GameModel.findById(gameId);
+  const game = await Game.findById(gameId);
   return game;
 };
 
@@ -34,7 +34,7 @@ export const deleteGameById = async (gameId: string) => {
   if (!Types.ObjectId.isValid(gameId))
     throw new NotFoundError('Invalid Game Id');
 
-  const deletedGame = await GameModel.findByIdAndDelete(gameId);
+  const deletedGame = await Game.findByIdAndDelete(gameId);
   return deletedGame;
 };
 
@@ -45,13 +45,17 @@ export const findGameByNameAndReleaseDate = async (
 ) => {
   let game;
   if (toggleReleaseSearch) {
-    game = await GameModel.findOne({ name, releaseDate });
+    game = await Game.findOne({ name, releaseDate });
   } else {
-    game = await GameModel.findOne({ name });
+    game = await Game.findOne({ name });
   }
   return game;
 };
 
 export const getAllGames = async () => {
-  return await GameModel.find({});
+  return await Game.find({});
 };
+
+export const clearGames = async () => {
+  await Game.deleteMany({})
+}

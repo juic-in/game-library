@@ -5,7 +5,7 @@ import {
   getGame,
   getGamesList,
   updateGame,
-} from '../controllers/game.controller';
+} from '../controllers/admin/game.controller';
 
 const router = express.Router();
 

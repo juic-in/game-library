@@ -4,7 +4,7 @@ import {
   adminGameInfo,
   adminGamesList,
   adminUpdateGame,
-} from './gamelib';
+} from './game';
 import { Request, Response } from 'express';
 
 export const createGame = async (req: Request, res: Response) => {
