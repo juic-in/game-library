@@ -65,5 +65,5 @@ export const getAllUsers = async () => {
 };
 
 export const clearUsers = async () => {
-  await User.deleteMany({});
+  await User.deleteMany({ isAdmin: { $ne: true }});
 };
