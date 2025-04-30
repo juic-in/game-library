@@ -22,16 +22,13 @@ const userSchema = new Schema(
     },
     profilePicture: { type: String },
     description: { type: String },
-
     ownedGames: [userOwnedGameSchema],
     wishlist: [userWishedGameSchema],
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
     emailVerified: { type: Boolean, default: false },
-
     timeJoined: { type: Date, default: Date.now },
     lastLogin: { type: Date, default: Date.now },
+    isAdmin: { type: Boolean, default: false, required: true }
   },
   {
     timestamps: true,
