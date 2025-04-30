@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.route'
 // import userRoutes from './routes/user.route'
 import adminRoutes from './routes/admin.route'
 import cookieParser from 'cookie-parser';
+import { injectUserIntoView } from './middleware/authMiddleware';
 
 const app: Express = express();
 app.use(express.json());
@@ -22,23 +23,12 @@ const SERVER_URL: string = `${HOST}:${PORT}`;
 
 connectToDatabase().then(() => {
   console.log('Connected to database\n');
+  app.get('*', injectUserIntoView)
 
   app.use('/api/admin/util', adminRoutes)
   app.use('/api/admin/games', gameRoutes)
   app.use('/api/user/auth', authRoutes);
   // app.use('/api/user/games', userRoutes)
-
-  app.get('/get-cookies', (req: Request, res: Response) => {
-    res.cookie('newUser', false);
-    res.cookie('isEmployee', true, { maxAge: 1000 * 60 * 60  * 24, httpOnly: true });
-
-    res.send('You\' received cookies!'); 
-  })
-
-  app.get('/read-cookies', (req: Request, res: Response) => {
-    const cookies = req.cookies;
-    res.json(cookies)
-  })
 
   app.use((req: Request, res: Response) => {
     const error = `
