@@ -6,8 +6,10 @@ import {
   getGamesList,
   updateGame,
 } from '../controllers/admin/game.controller';
+import { requireAdminAuth } from '../middleware/authMiddleware';
 
 const router = express.Router();
+router.use(requireAdminAuth)
 
 router.post('/', createGame);
 

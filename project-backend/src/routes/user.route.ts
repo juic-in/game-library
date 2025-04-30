@@ -1,7 +1,9 @@
-// import express from 'express';
+import express from 'express';
+import { requireUserAuth } from '../middleware/authMiddleware';
 
-// const router = express.Router();
+const router = express.Router();
+router.use(requireUserAuth)
 
-// router.put('/:gameId', updateUser);
-// // 
-// export default router;
+// router.put('/:gameId', addToUserLib);
+// 
+export default router;
