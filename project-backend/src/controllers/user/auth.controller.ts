@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
-import { authRegister } from './auth';
+import { authLogin, authLogout, authRegister } from './auth';
+import { createToken, maxAge } from '../../utils/authUtil';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
     const result = await authRegister(name, email, password);
-    res.status(200).json({ success: true, data: result })
+    const token = createToken(result._id.toString());
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ success: true, data: result._id });
   } catch (error) {
     res
       .status(error.statusCode || 500)
@@ -15,6 +18,11 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
+    const { email, password } = req.body;
+    const result = await authLogin(email, password);
+    const token = createToken(result._id.toString());
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ success: true, data: result._id });
   } catch (error) {
     res
       .status(error.statusCode || 500)
@@ -24,6 +32,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const logoutUser = async (req: Request, res: Response) => {
   try {
+    await authLogout(req, res);
+    return res
+      .status(200)
+      .json({ success: true, data: 'Logged out successfully' });
   } catch (error) {
     res
       .status(error.statusCode || 500)

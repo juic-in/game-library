@@ -1,6 +1,7 @@
 import { findUserByEmail, findUserByUsername } from '../data/db/dbUser';
 import { BadRequestError } from './errors';
 import * as EmailValidator from 'email-validator';
+import jwt from 'jsonwebtoken'
 
 export const validateName = async (name: string) => {
   const len = name.length;
@@ -45,3 +46,15 @@ export const validateEmail = async (email: string) => {
   else if (await findUserByEmail(email))
     throw new BadRequestError(`${email} is already taken`);
 };
+
+export const maxAge = 3 * 24 * 60 * 60
+
+export const createToken = (id: string) => {
+  const jwtSecret = process.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET not defined in environment variables");
+  }
+
+  return jwt.sign({ id }, jwtSecret, {expiresIn: maxAge})
+}
