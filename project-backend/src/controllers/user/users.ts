@@ -1,112 +1,157 @@
-// import {
-//   UserOwnedGameData,
-//   UserWishedGameData,
-//   UserProfile,
-// } from './interface';
-// import { getUserById } from './data/getdata';
+import { findGameById } from '../../data/db/dbGame';
+import { findUserById } from '../../data/db/dbUser';
+import { User } from '../../data/models/User';
+import { BadRequestError, UnauthorizedError } from '../../utils/errors';
 
-// export function userAddGameToWishlist(userId: string, gameId: string) {
-//   const user = getUserById(userId);
-//   if (!user.wishlist) {
-//     user.wishlist = [];
-//   }
-//   if (!user.wishlist.includes(gameId)) {
-//     user.wishlist.push(gameId);
-//   }
-// }
-// export function userRemoveGameFromWishlist(userId: string, gameId: string) {
-//   const user = getUserById(userId);
-//   if (user.wishlist) {
-//     user.wishlist = user.wishlist.filter((g) => g !== gameId);
-//   }
-// }
-// export function userAddGameToOwnedGames(userId: string, gameId: string) {
-//   const user = getUserById(userId);
-//   if (!user.ownedGames) {
-//     user.ownedGames = [];
-//   }
-//   if (!user.ownedGames.includes(gameId)) {
-//     user.ownedGames.push(gameId);
-//   }
-// }
-// export function userRemoveGameFromOwnedGames(userId: string, gameId: string) {
-//   const user = getUserById(userId);
-//   if (user.ownedGames) {
-//     user.ownedGames = user.ownedGames.filter((g) => g !== gameId);
-//   }
-// }
-// export function userAddFriend(userId: string, friendId: string) {
-//   const user = getUserById(userId);
-//   const friend = getUserById(friendId);
+export const userAddGameToWishlist = async (userId: string, gameId: string) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (!game) {
+    throw new BadRequestError('Invalid Game');
+  }
 
-//   if (!user.friends) {
-//     user.friends = [];
-//   }
-//   if (!user.friends.includes(friend)) {
-//     user.friends.push(friend);
-//   }
-// }
-// export function userRemoveFriend(userId: string, friend: string) {
-//   const user = getUserById(userId);
-//   if (user.friends) {
-//     user.friends = user.friends.filter((f) => f !== friend);
-//   }
-// }
-// export function userUpdateProfile(userId: string, profile: UserProfile) {
-//   const user = getUserById(userId);
-//   if (profile.nameFirst) {
-//     user.nameFirst = profile.nameFirst;
-//   }
-//   if (profile.nameLast) {
-//     user.nameLast = profile.nameLast;
-//   }
-//   if (profile.email) {
-//     user.email = profile.email;
-//   }
-// }
-// export function userGetProfile(userId: string) {
-//   const user = getUserById(userId);
-//   return {
-//     nameFirst: user.nameFirst,
-//     nameLast: user.nameLast,
-//     email: user.email,
-//     ownedGames: user.ownedGames,
-//     wishlist: user.wishlist,
-//     friends: user.friends,
-//   };
-// }
-// export function userGetOwnedGames(userId: string) {
-//   const user = getUserById(userId);
-//   return user.ownedGames || [];
-// }
-// export function userGetWishlist(userId: string) {
-//   const user = getUserById(userId);
-//   return user.wishlist || [];
-// }
-// export function userGetFriends(userId: string) {
-//   const user = getUserById(userId);
-//   return user.friends || [];
-// }
-// export function userGetGameDetails(
-//   userId: string,
-//   gameId: string
-// ): UserOwnedGameData | UserWishedGameData {
-//   const user = getUserById(userId);
-//   const game =
-//     user.ownedGames.find((g) => g.gameId === gameId) ||
-//     user.wishlist.find((g) => g.gameId === gameId);
-//   if (!game) {
-//     throw new Error('Game not found');
-//   }
-//   return game;
-// }
-// export function userGetGameReviews(userId: string, gameId: string) {
-//   const user = getUserById(userId);
-//   const game =
-//     user.ownedGames.find((g) => g.gameId === gameId) ||
-//     user.wishlist.find((g) => g.gameId === gameId);
-//   if (!game) {
-//     throw new Error('Game not found');
-//   }
-//   return game.reviews || [];
-// }
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $push: { wishlist: { game: game._id } },
+    }
+  );
+
+  return {};
+};
+export const userRemoveGameFromWishlist = async (
+  userId: string,
+  gameId: string
+) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (!game) {
+    throw new BadRequestError('Invalid Game');
+  }
+
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $pull: { wishlist: { game: game._id } },
+    }
+  );
+
+  return {};
+};
+export const userAddGameToOwnedGames = async (
+  userId: string,
+  gameId: string
+) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (!game) {
+    throw new BadRequestError('Invalid Game');
+  }
+
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $push: { ownedGames: { game: game._id } },
+    }
+  );
+
+  return {};
+};
+export const userRemoveGameFromOwnedGames = async (
+  userId: string,
+  gameId: string
+) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (!game) {
+    throw new BadRequestError('Invalid Game');
+  }
+
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $pull: { ownedGames: { game: game._id } },
+    }
+  );
+
+  return {};
+};
+export const userAddFriend = async (userId: string, friendId: string) => {
+  const { _id } = await findUserById(userId);
+  const friend = await findUserById(friendId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (await User.findOne({
+    friends: friendId
+  })) {
+    throw new BadRequestError('This user is already your friend')
+  }
+
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $push: { friends: { friend: friend._id}}
+    }
+  )
+}
+export const userRemoveFriend = async (userId: string, friendId: string) => {
+  const { _id } = await findUserById(userId);
+  const friend = await findUserById(friendId);
+  if (!_id) {
+    throw new UnauthorizedError('Invalid User');
+  } else if (!await User.findOne({
+    friends: friendId
+  })) {
+    throw new BadRequestError('This user not your friend')
+  }
+
+  await User.updateOne(
+    {
+      _id,
+    },
+    {
+      $pull: { friends: { friend: friend._id}}
+    }
+  )
+}
+
+export const userGetOwnedGames = async (userId: string) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new UnauthorizedError('Invalid User')
+  }
+  return user.ownedGames || [];
+}
+export const userGetWishlist = async (userId: string) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new UnauthorizedError('Invalid User')
+  }
+  return user.wishlist || [];
+}
+export const userGetFriends = async (userId: string) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new UnauthorizedError('Invalid User')
+  }
+  return user.friends || [];
+}
+
