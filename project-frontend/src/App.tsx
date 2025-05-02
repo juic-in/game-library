@@ -1,17 +1,31 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
-import { CreatePage } from './pages/CreatePage';
 import { Navbar } from './components/Navbar';
+import { Sidebar } from './components/Sidebar';
+import { useState } from 'react';
+import Dashboard from './pages/Dashboard';
+import { Profile } from './pages/Profile';
 
 function App() {
+  const [sideBarCollapsed, setSideBarCollapsed] = useState(true);
+
+  const toggleSidebar = () => setSideBarCollapsed(!sideBarCollapsed);
+
   return (
     <>
       <Box minH={'100vh'} bg={useColorModeValue('gray.100', 'gray.900')}>
-        <Navbar />
+        <Navbar toggleSidebar={toggleSidebar} />
+        <Flex height="calc(100vh - 64px)">
+          <Sidebar isCollapsed={sideBarCollapsed} />
+          <Box flex="1" p={4} bg="gray.50">
+            Main Content
+          </Box>
+        </Flex>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/create" element={<CreatePage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Box>
     </>
