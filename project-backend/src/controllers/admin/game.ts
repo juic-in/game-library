@@ -70,19 +70,3 @@ export const adminDeleteGame = async (gameId: string) => {
   }
   return game;
 };
-
-export const adminGamesList = async () => {
-  const result = getAllGames();
-  if (!result) {
-    throw new InternalServerError('Could not find the Games collection');
-  }
-  return result;
-};
-
-export const adminGameInfo = async (gameId: string) => {
-  const result = await findGameById(gameId);
-  if (!result) {
-    throw new BadRequestError(`There is no such game with a id of ${gameId}`);
-  }
-  return result;
-};

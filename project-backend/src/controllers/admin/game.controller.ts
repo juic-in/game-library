@@ -1,8 +1,6 @@
 import {
   adminAddGame,
   adminDeleteGame,
-  adminGameInfo,
-  adminGamesList,
   adminUpdateGame,
 } from './game';
 import { Request, Response } from 'express';
@@ -44,25 +42,3 @@ export const deleteGame = async (req: Request, res: Response) => {
   }
 };
 
-export const getGamesList = async (req: Request, res: Response) => {
-  try {
-    const result = await adminGamesList();
-    return res.status(200).json({ success: true, data: result });
-  } catch (error) {
-    res
-      .status(error.statusCode || 500)
-      .json({ success: false, error: error.message });
-  }
-};
-
-export const getGame = async (req: Request, res: Response) => {
-  try {
-    const { gameId } = req.params;
-    const result = await adminGameInfo(gameId);
-    return res.status(200).json({ success: true, data: result });
-  } catch (error) {
-    res
-      .status(error.statusCode || 500)
-      .json({ success: false, error: error.message });
-  }
-};

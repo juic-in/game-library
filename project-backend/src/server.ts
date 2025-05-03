@@ -7,6 +7,7 @@ import gameRoutes from './routes/game.route'
 import authRoutes from './routes/auth.route'
 import userRoutes from './routes/user.route'
 import adminRoutes from './routes/admin.route'
+import publicRoutes from './routes/public.route'
 import cookieParser from 'cookie-parser';
 import { injectUserIntoView } from './middleware/authMiddleware';
 
@@ -29,6 +30,7 @@ connectToDatabase().then(() => {
   app.use('/api/admin/games', gameRoutes)
   app.use('/api/user/auth', authRoutes);
   app.use('/api/user/games', userRoutes)
+  app.use('/api/public', publicRoutes)
 
   app.use((req: Request, res: Response) => {
     const error = `
