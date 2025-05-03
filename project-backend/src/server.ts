@@ -1,61 +1,34 @@
-import express, { json, Request, Response } from 'express';
+import express, { json, Request, Response, Express } from 'express';
 import { connectToDatabase } from './data/db/dbConnection';
-import { adminAddGame, adminDeleteGame, adminUpdateGame } from './gamelib';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
-import { clear } from './other';
+import gameRoutes from './routes/game.route'
+import authRoutes from './routes/auth.route'
+// import userRoutes from './routes/user.route'
+import adminRoutes from './routes/admin.route'
+import cookieParser from 'cookie-parser';
+import { injectUserIntoView } from './middleware/authMiddleware';
 
-const app = express();
+const app: Express = express();
 app.use(express.json());
 app.use(json());
 app.use(morgan('dev'));
 app.use(cors());
+app.use(cookieParser());
 
 const PORT: number = parseInt(process.env.PORT || config.port) || 6900;
 const HOST: string = process.env.IP || '127.0.0.1';
 const SERVER_URL: string = `${HOST}:${PORT}`;
 
 connectToDatabase().then(() => {
-  console.log('Connected to database');
-  app.delete('/api/admin/clear', async (req: Request, res: Response) => {
-    try {
-      await clear();
-      res.status(200).json({});
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-  app.post('/api/games', async (req: Request, res: Response) => {
-    try {
-      const gameData = req.body;
-      const { gameId } = await adminAddGame(gameData);
-      res.status(200).json({ gameId });
-    } catch (error) {
-      res.status(error.statusCode || 400).json({ error: error.message });
-    }
-  });
+  console.log('Connected to database\n');
+  app.get('*', injectUserIntoView)
 
-  app.put('/api/games/:gameId', async (req: Request, res: Response) => {
-    try {
-      const { gameId } = req.params;
-      const gameData = req.body;
-      await adminUpdateGame(gameId, gameData);
-      res.status(200).json({ gameId });
-    } catch (error) {
-      res.status(error.statusCode).json({ error: error.message });
-    }
-  });
-
-  app.delete('/api/games/:gameId', async (req: Request, res: Response) => {
-    try {
-      const { gameId } = req.params;
-      const result = await adminDeleteGame(gameId);
-      res.json(200).json(result);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
-    }
-  });
+  app.use('/api/admin/util', adminRoutes)
+  app.use('/api/admin/games', gameRoutes)
+  app.use('/api/user/auth', authRoutes);
+  // app.use('/api/user/games', userRoutes)
 
   app.use((req: Request, res: Response) => {
     const error = `

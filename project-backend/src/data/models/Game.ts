@@ -15,8 +15,8 @@ interface IGame extends Document {
 
 const gameSchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
+    name: { type: String, required: true, minLength: 3 },
+    description: { type: String, default: '', minLength: 0 },
     genres: { type: [String], default: [] },
     releaseDate: { type: Date, default: Date.now },
     developer: { type: String, default: 'Unknown' },
@@ -31,6 +31,11 @@ const gameSchema: Schema = new Schema(
   }
 );
 
-const GameModel = mongoose.model<IGame>('Game', gameSchema);
+gameSchema.post('save', (doc, next) => {
+  console.log(
+    `[Log - ${new Date().toISOString()}] The game with the id of (${doc._id}) has been created/updated and saved`
+  );
+  next();
+});
 
-export default GameModel;
+export const Game = mongoose.model<IGame>('Game', gameSchema);
