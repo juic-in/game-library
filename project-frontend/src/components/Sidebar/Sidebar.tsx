@@ -8,7 +8,7 @@ interface Props {
 export const Sidebar = ({ isCollapsed }: Props) => {
   return (
     <Box
-      bg="gray.800"
+      bg="gray.700"
       color="white"
       w={isCollapsed ? '60px' : '200px'}
       minH="100vh"

@@ -13,22 +13,21 @@ function App() {
   const toggleSidebar = () => setSideBarCollapsed(!sideBarCollapsed);
 
   return (
-    <>
-      <Box minH={'100vh'} bg={useColorModeValue('gray.100', 'gray.900')}>
-        <Navbar toggleSidebar={toggleSidebar} />
-        <Flex height="calc(100vh - 64px)">
-          <Sidebar isCollapsed={sideBarCollapsed} />
-          <Box flex="1" p={4} bg="gray.50">
-            Main Content
-          </Box>
-        </Flex>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </Box>
-    </>
+    <Box minH={'100vh'} bg={useColorModeValue('gray.100', 'gray.900')}>
+      <Navbar toggleSidebar={toggleSidebar} />
+
+      <Flex height="calc(100vh - 64px)">
+        <Sidebar isCollapsed={sideBarCollapsed} />
+
+        <Box flex="1" p={4} bg="gray.50">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </Box>
+      </Flex>
+    </Box>
   );
 }
 
