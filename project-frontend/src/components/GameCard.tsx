@@ -1,4 +1,5 @@
-import { Box, Heading, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import { GrAnalytics } from 'react-icons/gr';
 
 interface Props {
   title: string;
@@ -6,7 +7,7 @@ interface Props {
 }
 
 export const GameCard = ({ title, description }: Props) => {
-  const cardHeight = useBreakpointValue({ base: "400px", md: "500px" });
+  const cardHeight = useBreakpointValue({ base: '400px', md: '500px' });
 
   return (
     <Box
@@ -14,21 +15,29 @@ export const GameCard = ({ title, description }: Props) => {
       borderRadius="lg"
       boxShadow="md"
       _hover={{
-        boxShadow: '2xl', 
-        transform: 'scale(1.02)', 
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease', 
+        boxShadow: '2xl',
+        transform: 'scale(1.02)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
       }}
       bg="white"
-      height={cardHeight} 
+      height={cardHeight}
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      maxW="sm" 
+      maxW="sm"
     >
-      <Heading size="lg" mb={3}>{title}</Heading>
-      <Text flex="1" mb={3}>{description}</Text>
       <Box mt={2} textAlign="center">
-        <Text fontSize="sm" color="gray.500">More Info</Text>
+        <Heading size="lg" mb={3} color="gray.500">
+          {title}
+        </Heading>
+        <Text flex="1" mb={3} color="gray.500">
+          {description}
+        </Text>
+      </Box>
+      <Box mt={2} textAlign="center">
+        <Text fontSize="sm" color="gray.500">
+          More Info
+        </Text>
       </Box>
     </Box>
   );
