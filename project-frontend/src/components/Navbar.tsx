@@ -7,31 +7,28 @@ interface Props {
 }
 
 export const Navbar = ({ toggleSidebar }: Props) => {
-  // Get the current color mode (light or dark)
   const iconColor = useColorModeValue('black', 'white'); // White in dark mode, black in light mode
 
   return (
     <>
-      <Container maxW={'1440px'} px={6}>
+      <Container minW={'100%'} px={0}>
         <Flex
           h={16}
           alignItems={'center'}
           justifyContent={'space-between'}
           flexDir={{ base: 'column', sm: 'row' }}
         >
-          {/* Sidebar Toggle Box (left side) */}
           <Box
             as="div"
             onClick={toggleSidebar}
-            w="40px" // Width of the box
+            w="60px" // Width of the box
             h="40px" // Height of the box
             display="flex"
             justifyContent="center"
             alignItems="center"
             cursor="pointer" // Makes it clickable
           >
-            {/* Hamburger icon color based on light/dark mode */}
-            <HamburgerIcon color={iconColor} />
+            <HamburgerIcon color={iconColor} w={'60px'}/>
           </Box>
 
           {/* Logo (centered) */}
@@ -49,10 +46,10 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             <Link to={'/'}>GameXUnify</Link>
           </Text>
 
-          {/* Empty Box (right side) to balance the layout */}
-          <Box w="40px" /> {/* This keeps the layout balanced on both sides */}
+          <Box w="40px" /> 
         </Flex>
       </Container>
+      <Box height="2px" width="100%" bgGradient="linear(to-r, cyan.400, blue.500)" />
     </>
   );
 };
