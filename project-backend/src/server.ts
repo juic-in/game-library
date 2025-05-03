@@ -5,7 +5,7 @@ import cors from 'cors';
 import config from './config.json';
 import gameRoutes from './routes/game.route'
 import authRoutes from './routes/auth.route'
-// import userRoutes from './routes/user.route'
+import userRoutes from './routes/user.route'
 import adminRoutes from './routes/admin.route'
 import cookieParser from 'cookie-parser';
 import { injectUserIntoView } from './middleware/authMiddleware';
@@ -28,7 +28,7 @@ connectToDatabase().then(() => {
   app.use('/api/admin/util', adminRoutes)
   app.use('/api/admin/games', gameRoutes)
   app.use('/api/user/auth', authRoutes);
-  // app.use('/api/user/games', userRoutes)
+  app.use('/api/user/games', userRoutes)
 
   app.use((req: Request, res: Response) => {
     const error = `
