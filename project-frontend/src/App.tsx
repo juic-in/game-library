@@ -2,7 +2,7 @@ import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { Navbar } from './components/Navbar';
-import { Sidebar } from './components/Sidebar';
+import { Sidebar } from './components/Sidebar/Sidebar';
 import { useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import { Profile } from './pages/Profile';
