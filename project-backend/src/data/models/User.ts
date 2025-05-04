@@ -1,19 +1,42 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-export interface IUserOwnedGame {
+export interface UserGameRefItem {
   game: mongoose.Types.ObjectId;
-  addedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UserFriend {
+  friend: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UserReview {
+  review: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IUserOwnedGame {
+  items: UserGameRefItem[];
+  public: boolean;
 }
 
 export interface IUserWishlist {
-  game: mongoose.Types.ObjectId;
-  wishedAt: Date;
+  items: UserGameRefItem[];
+  public: boolean;
 }
 
 export interface IUserFriends {
-  friend: mongoose.Types.ObjectId;
-  addedAt: Date;
+  items: UserFriend[];
+  public: boolean;
+}
+
+export interface IUserReviews {
+  items: UserReview[];
+  public: boolean;
 }
 
 export interface IUser extends Document {
@@ -30,22 +53,72 @@ export interface IUser extends Document {
   timeJoined: Date;
   lastLogin: Date;
   isAdmin: boolean;
+  public: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  reviews: IUserReviews[];
 }
 
-const userOwnedGameSchema = new Schema<IUserOwnedGame>({
-  game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
-  addedAt: { type: Date, default: Date.now },
-});
+const userGameRefItemSchema = new Schema(
+  {
+    game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
+  },
+  { _id: false, timestamps: true }
+); // prevent extra _id in subdocuments
 
-const userWishlistSchema = new Schema<IUserWishlist>({
-  game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
-  wishedAt: { type: Date, default: Date.now },
-});
+const userFriendSchema = new Schema(
+  {
+    friend: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+  },
+  { _id: false, timestamps: true }
+);
 
-const userFriendsSchema = new Schema<IUserFriends>({
-  friend: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  addedAt: { type: Date, default: Date.now },
-});
+const userReviewSchema = new Schema(
+  {
+    review: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Review',
+      required: true,
+    },
+  },
+  { _id: false, timestamps: true }
+);
+
+const userOwnedGameSchema = new Schema<IUserOwnedGame>(
+  {
+    items: [userGameRefItemSchema],
+    public: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
+const userWishlistSchema = new Schema<IUserWishlist>(
+  {
+    items: [userGameRefItemSchema],
+    public: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
+const userFriendsSchema = new Schema<IUserFriends>(
+  {
+    items: [userFriendSchema],
+    public: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
+const userReviewsSchema = new Schema<IUserReviews>(
+  {
+    items: [userReviewSchema],
+    public: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
 
 const userSchema = new Schema<IUser>(
   {
@@ -53,7 +126,7 @@ const userSchema = new Schema<IUser>(
     username: { type: String, required: true, unique: true, minLength: 1 },
     password: { type: String, required: true, unique: true, minLength: 8 },
     oldPasswords: {
-      type: [String], // <-- Array of strings
+      type: [String],
       default: [],
     },
     profilePicture: { type: String },
@@ -61,10 +134,12 @@ const userSchema = new Schema<IUser>(
     ownedGames: [userOwnedGameSchema],
     wishlist: [userWishlistSchema],
     friends: [userFriendsSchema],
-    emailVerified: { type: Boolean, default: false },
+    emailVerified: { type: Boolean, default: false, required: true },
     timeJoined: { type: Date, default: Date.now },
     lastLogin: { type: Date, default: Date.now },
     isAdmin: { type: Boolean, default: false, required: true },
+    public: { type: Boolean, default: false, required: true },
+    reviews: [userReviewsSchema],
   },
   {
     timestamps: true,
