@@ -20,6 +20,7 @@ export const gameInfo = async (gameId: string) => {
   return game;
 };
 
+// Break up later on
 export const userInfo = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
