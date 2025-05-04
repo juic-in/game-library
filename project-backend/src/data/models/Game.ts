@@ -1,8 +1,31 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export interface GameReview {
+  review: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IGameReviews {
+  items: GameReview[];
+  public: boolean;
+}
+
+const userReviewSchema = new Schema(
+  {
+    review: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Review',
+      required: true,
+    },
+  },
+  { _id: false, timestamps: true }
+);
+
 interface IGame extends Document {
   name: string;
   description: string;
+  reviews: IGameReviews
   genres: string[];
   releaseDate: string;
   developer: string;
@@ -17,6 +40,7 @@ const gameSchema: Schema = new Schema(
   {
     name: { type: String, required: true, minLength: 3 },
     description: { type: String, default: '', minLength: 0 },
+    reviews: [userReviewSchema],
     genres: { type: [String], default: [] },
     releaseDate: { type: Date, default: Date.now },
     developer: { type: String, default: 'Unknown' },
