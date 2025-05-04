@@ -171,4 +171,6 @@ Thumbs.db
 # Ignore built ts files
 dist/**/*
 
+# Ignore scraped data
+/src/scripts/checkpoints/
 

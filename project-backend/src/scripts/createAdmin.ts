@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { User } from './data/models/User';
 import dotenv from 'dotenv';
+import { User } from '../data/models/User';
 dotenv.config();
 
 const ADMIN_LOGIN = process.env.ADMIN_LOGIN
