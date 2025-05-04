@@ -49,13 +49,26 @@ export interface IUser extends Document {
   ownedGames: IUserOwnedGames;
   wishlist: IUserWishlist;
   friends: IUserFriends;
+  reviews: IUserReviews;
   emailVerified: boolean;
   lastLogin: Date;
   isAdmin: boolean;
   public: boolean;
   createdAt: Date;
   updatedAt: Date;
-  reviews: IUserReviews[];
+}
+
+export interface UserProfile {
+  userId: string,
+  username: string;
+  profilePicture?: string;
+  description?: string;
+  ownedGames?: IUserOwnedGames;
+  wishlist?: IUserWishlist;
+  friends?: IUserFriends;
+  lastLogin?: Date;
+  createdAt?: Date;
+  reviews?: IUserReviews[];
 }
 
 const userGameRefItemSchema = new Schema(
@@ -133,11 +146,11 @@ const userSchema = new Schema<IUser>(
     ownedGames: [userOwnedGameSchema],
     wishlist: [userWishlistSchema],
     friends: [userFriendsSchema],
+    reviews: [userReviewsSchema],
     emailVerified: { type: Boolean, default: false, required: true },
     lastLogin: { type: Date, default: Date.now },
     isAdmin: { type: Boolean, default: false, required: true },
-    public: { type: Boolean, default: false, required: true },
-    reviews: [userReviewsSchema],
+    public: { type: Boolean, default: true, required: true },
   },
   {
     timestamps: true,
