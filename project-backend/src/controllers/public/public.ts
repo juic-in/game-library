@@ -1,8 +1,7 @@
-import { createDeflate } from 'zlib';
 import { findGameById, getAllGames } from '../../data/db/dbGame';
 import { findUserById } from '../../data/db/dbUser';
 import { UserProfile } from '../../data/models/User';
-import { BadRequestError, InternalServerError } from '../../utils/errors';
+import { BadRequestError, InternalServerError, UnauthorizedError } from '../../utils/errors';
 
 export const gamesList = async () => {
   const result = getAllGames();
@@ -21,6 +20,19 @@ export const gameInfo = async (gameId: string) => {
 };
 
 // Break up later on
+export const userGames = async (userId: string) => {
+  const user = await findUserById(userId);  
+  if (!user) {
+    throw new BadRequestError(`There is no such user with a id of ${userId}`);
+  }
+
+  const { ownedGames } = user
+  if (!ownedGames.public) throw new UnauthorizedError('This user\'s games are private');
+  else {
+    return ownedGames.items 
+  }
+}
+
 export const userInfo = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
