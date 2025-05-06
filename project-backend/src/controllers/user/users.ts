@@ -138,20 +138,20 @@ export const userGetOwnedGames = async (userId: string) => {
   if (!user) {
     throw new UnauthorizedError('Invalid User')
   }
-  return user.ownedGames || [];
+  return user.ownedGames.items;
 }
 export const userGetWishlist = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
     throw new UnauthorizedError('Invalid User')
   }
-  return user.wishlist || [];
+  return user.wishlist.items;
 }
 export const userGetFriends = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
     throw new UnauthorizedError('Invalid User')
   }
-  return user.friends || [];
+  return user.friends.items;
 }
 
