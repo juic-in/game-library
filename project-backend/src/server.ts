@@ -29,7 +29,7 @@ connectToDatabase().then(() => {
   app.use('/api/admin/util', adminRoutes)
   app.use('/api/admin/games', gameRoutes)
   app.use('/api/user/auth', authRoutes);
-  app.use('/api/user/games', userRoutes)
+  app.use('/api/user/', userRoutes)
   app.use('/api/public', publicRoutes)
 
   app.use((req: Request, res: Response) => {
