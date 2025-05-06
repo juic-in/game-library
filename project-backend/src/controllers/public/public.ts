@@ -58,3 +58,27 @@ export const userInfo = async (userId: string) => {
     };
   }
 };
+
+export const userGetWishlist = async (userId: string) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new UnauthorizedError('Invalid User')
+  }
+
+  const { public: isPublic, items} = user.wishlist
+  if (isPublic) {
+    return items
+  } else throw new UnauthorizedError('This user\'s wishlist is private')
+
+}
+export const userGetFriends = async (userId: string) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new UnauthorizedError('Invalid User')
+  }
+
+  const { public: isPublic, items} = user.wishlist
+  if (isPublic) {
+    return items
+  } else throw new UnauthorizedError('This user\'s friends list is private')
+}
