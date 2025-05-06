@@ -16,19 +16,19 @@ const router = express.Router();
 
 router.use(requireUserAuth);
 
-router.post('/:gameId/lib', addToUserLib);
+router.post('games/:gameId', addToUserLib);
 
-router.delete('/:gameId/lib', removeFromUserLib);
+router.delete('games/:gameId', removeFromUserLib);
 
-router.post('/:gameId/wishlist', addToUserWishlist);
+router.post('games/:gameId/wishlist', addToUserWishlist);
 
-router.delete('/:gameId/wishlist', removeFromUserWishlist);
+router.delete('games/:gameId/wishlist', removeFromUserWishlist);
 
-router.post('/:gameId/friends', addToUserFriends);
+router.post('/:userId/friends', addToUserFriends);
 
-router.delete('/:gameId/friends', removeFromUserFriends);
+router.delete('/:userId/friends', removeFromUserFriends);
 
-router.get('/lib', getUserGames);
+router.get('/games', getUserGames);
 
 router.get('/wishlist', getUserWishlist);
 
