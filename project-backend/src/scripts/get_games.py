@@ -215,6 +215,7 @@ def main():
         appdetails_data = appdetails['data']
         appdetails_type = appdetails_data["type"]
         if appdetails_type != "game":
+            excluded_apps_list.append(appid)
             print_log(f"App ID: {appid} with name: {appdetails_data['name']} does not map to a game")
             continue
 
