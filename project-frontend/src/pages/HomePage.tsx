@@ -2,7 +2,7 @@ import { SimpleGrid, Box } from '@chakra-ui/react';
 import { GameCard } from '../components/GameCard'; // Assuming the path is correct
 import { useEffect, useState } from 'react';
 import { getGamesList } from '../api/game';
-import { ErrorModal } from '../components/Error';
+import { ErrorModal } from '../components/ErrorModal';
 
 interface GameCardInfo {
   _id: string;
