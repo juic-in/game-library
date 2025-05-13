@@ -3,10 +3,10 @@ import { connectToDatabase } from './data/db/dbConnection';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
-import authRoutes from './routes/auth.route'
-import userRoutes from './routes/user.route'
-import adminRoutes from './routes/admin.route'
-import publicRoutes from './routes/public.route'
+import authRoutes from './routes/auth.route';
+import userRoutes from './routes/user.route';
+import adminRoutes from './routes/admin.route';
+import publicRoutes from './routes/public.route';
 import cookieParser from 'cookie-parser';
 import { injectUserIntoView } from './middleware/authMiddleware';
 
@@ -14,7 +14,12 @@ const app: Express = express();
 app.use(express.json());
 app.use(json());
 app.use(morgan('dev'));
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.ORIGIN_URL,
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 
 const PORT: number = parseInt(process.env.PORT || config.port) || 6900;
@@ -23,12 +28,12 @@ const SERVER_URL: string = `${HOST}:${PORT}`;
 
 connectToDatabase().then(() => {
   console.log('Connected to database\n');
-  app.get('*', injectUserIntoView)
+  app.get('*', injectUserIntoView);
 
-  app.use('/api/admin/', adminRoutes)
+  app.use('/api/admin/', adminRoutes);
   app.use('/api/user/auth', authRoutes);
-  app.use('/api/user/', userRoutes)
-  app.use('/api/public', publicRoutes)
+  app.use('/api/user/', userRoutes);
+  app.use('/api/public', publicRoutes);
 
   app.use((req: Request, res: Response) => {
     const error = `
