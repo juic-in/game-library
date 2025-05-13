@@ -7,17 +7,21 @@ interface Props {
 }
 
 export const GameCard = ({ title, description }: Props) => {
-  const cardHeight = useBreakpointValue({ base: '400px', md: '500px' });
+  const cardHeight = useBreakpointValue({ base: '500px', md: '600px' });
 
+  // render normally if game is owned and the user is logged in,
+  // else if user logged but not owned game,  render not owned as grayed out,
+  // else render normally
+  
   return (
     <Box
       p={5}
       borderRadius="lg"
       boxShadow="md"
+      transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
       _hover={{
         boxShadow: '2xl',
         transform: 'scale(1.02)',
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
       }}
       bg="white"
       height={cardHeight}
