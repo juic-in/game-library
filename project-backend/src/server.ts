@@ -3,7 +3,6 @@ import { connectToDatabase } from './data/db/dbConnection';
 import morgan from 'morgan';
 import cors from 'cors';
 import config from './config.json';
-import gameRoutes from './routes/game.route'
 import authRoutes from './routes/auth.route'
 import userRoutes from './routes/user.route'
 import adminRoutes from './routes/admin.route'
@@ -26,8 +25,7 @@ connectToDatabase().then(() => {
   console.log('Connected to database\n');
   app.get('*', injectUserIntoView)
 
-  app.use('/api/admin/util', adminRoutes)
-  app.use('/api/admin/games', gameRoutes)
+  app.use('/api/admin/', adminRoutes)
   app.use('/api/user/auth', authRoutes);
   app.use('/api/user/', userRoutes)
   app.use('/api/public', publicRoutes)
