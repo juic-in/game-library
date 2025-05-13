@@ -1,5 +1,11 @@
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Box, Container, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Flex,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -11,7 +17,15 @@ export const Navbar = ({ toggleSidebar }: Props) => {
 
   return (
     <>
-      <Container minW={'100%'} px={0}>
+      <Container
+        minW={'100%'}
+        px={0}
+        position={'fixed'}
+        top={0}
+        zIndex={10}
+        bg="gray.900"
+        left={0}
+      >
         <Flex
           h={16}
           alignItems={'center'}
@@ -27,8 +41,10 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             justifyContent="center"
             alignItems="center"
             cursor="pointer" // Makes it clickable
+            userSelect={'none'}
+            onContextMenu={(e) => e.preventDefault()}
           >
-            <HamburgerIcon color={iconColor} w={'60px'}/>
+            <HamburgerIcon color={iconColor} w={'60px'} />
           </Box>
 
           {/* Logo (centered) */}
@@ -42,14 +58,19 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             flex="1"
             display="flex"
             justifyContent="center"
+            userSelect={'none'}
           >
             <Link to={'/'}>GameXUnify</Link>
           </Text>
 
-          <Box w="40px" /> 
+          <Box w="40px" />
         </Flex>
+        <Box
+          height="3px"
+          width="100%"
+          bgGradient="linear(to-r, cyan.400, blue.500)"
+        />
       </Container>
-      <Box height="2px" width="100%" bgGradient="linear(to-r, cyan.400, blue.500)" />
     </>
   );
 };
