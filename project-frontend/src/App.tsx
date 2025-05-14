@@ -17,13 +17,11 @@ function App() {
       <Navbar toggleSidebar={toggleSidebar} />
       <Flex height="100%">
         <Sidebar isCollapsed={sideBarCollapsed} />
-        <Box flex="1" p={4} bg="gray.50">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </Box>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
       </Flex>
     </Box>
   );
