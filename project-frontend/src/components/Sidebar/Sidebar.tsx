@@ -5,11 +5,11 @@ import { useEffect } from 'react';
 interface Props {
   isCollapsed: boolean;
 }
-
+// TODO: Switch out the font, ugly ahhh font
 export const Sidebar = ({ isCollapsed }: Props) => {
   useEffect(() => {
-    document.body.style.transition = 'margin-left 0.2s ease';
-    document.body.style.marginLeft = isCollapsed ? '60px' : '140px';
+    // document.body.style.transition = 'margin-left 0.2s ease';
+    document.body.style.marginLeft = isCollapsed ? '60px' : '155px';
 
     return () => {
       document.body.style.marginLeft = '0';
@@ -18,11 +18,11 @@ export const Sidebar = ({ isCollapsed }: Props) => {
 
   return (
     <Box
-      bg="gray.700"
+      bg="gray.800"
       color="white"
-      w={isCollapsed ? '60px' : '140px'}
+      w={isCollapsed ? '60px' : '155px'}
       minH="100vh"
-      transition="width 0.2s ease"
+      // transition="width 0.2s ease"
       position={'fixed'}
       left={0}
       zIndex={9}
