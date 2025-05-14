@@ -1,5 +1,4 @@
 import { Box, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
-import { GrAnalytics } from 'react-icons/gr';
 
 interface Props {
   title: string;
@@ -21,7 +20,7 @@ export const GameCard = ({ title, description }: Props) => {
       transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
       _hover={{
         boxShadow: '2xl',
-        transform: 'scale(1.02)',
+        transform: 'scale(1.005)',
       }}
       bg="white"
       height={cardHeight}

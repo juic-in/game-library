@@ -49,18 +49,10 @@ export const HomePage = () => {
     fetchData();
   }, []);
 
-
-  useEffect(() => {
-    document.body.style.marginTop = '64px';
-
-    return () => {
-      document.body.style.marginTop = '0';
-    };
-  }, []);
-
+  // TODO: FIX THE GRID LAYOUT, SHOULD BE DYNAMIC WITH A MIN SIZE 
   return (
     <>
-      <Box p={2}>
+      <Box p={2} m={6}>
         <SimpleGrid
           columns={[1, 2, 3, 4, 5]} // Added `6` columns for large screens (2xl)
           spacing={[3, 4, 5]} // Adjust spacing for different screen sizes
