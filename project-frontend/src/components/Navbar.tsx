@@ -4,16 +4,24 @@ import {
   Container,
   Flex,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Props {
   toggleSidebar: () => void;
 }
 
+
 export const Navbar = ({ toggleSidebar }: Props) => {
-  const iconColor = useColorModeValue('black', 'white'); // White in dark mode, black in light mode
+  useEffect(() => {
+      // Header height + Gradient bar height
+      document.body.style.marginTop = '65px';
+  
+      return () => {
+        document.body.style.marginTop = '0';
+      };
+    }, []);
 
   return (
     <>
@@ -44,7 +52,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             userSelect={'none'}
             onContextMenu={(e) => e.preventDefault()}
           >
-            <HamburgerIcon color={iconColor} w={'60px'} />
+            <HamburgerIcon color='white' w={'60px'} />
           </Box>
 
           {/* Logo (centered) */}
@@ -63,7 +71,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             <Link to={'/'}>GameXUnify</Link>
           </Text>
 
-          <Box w="40px" />
+          {/* <Box w="40px" /> */}
         </Flex>
         <Box
           height="3px"
