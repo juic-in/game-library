@@ -1,20 +1,17 @@
 import { Box, HStack, Icon, Text } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   isCollapsed: boolean;
   label: string;
   icon: IconType;
-  route: string;
+  onClick: () => void
 }
 
-export const SidebarItem = ({ icon, label, isCollapsed, route }: Props) => {
-  const navigate = useNavigate();
-
+export const SidebarItem = ({ icon, label, isCollapsed, onClick }: Props) => {
   return (
     <Box
-      onClick={() => navigate(route)}
+      onClick={onClick}
       cursor="pointer"
       _hover={{ bg: 'gray.700' }}
       px={4}
