@@ -31,7 +31,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
         position={'fixed'}
         top={0}
         zIndex={10}
-        bg="gray.900"
+        bg="black"
         left={0}
       >
         <Flex

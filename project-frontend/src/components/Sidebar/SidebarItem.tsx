@@ -1,6 +1,5 @@
 import { Box, HStack, Icon, Text } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-import { ReactElement } from 'react';
 
 interface Props {
   isCollapsed: boolean;
