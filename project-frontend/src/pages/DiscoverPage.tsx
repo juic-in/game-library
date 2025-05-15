@@ -1,4 +1,4 @@
-import { SimpleGrid, Box, Flex } from '@chakra-ui/react';
+import { SimpleGrid, Flex } from '@chakra-ui/react';
 import { GameCard } from '../components/GameCard'; // Assuming the path is correct
 import { useEffect, useState } from 'react';
 import { getGamesList } from '../api/game';
