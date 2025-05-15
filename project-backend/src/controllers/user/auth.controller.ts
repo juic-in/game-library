@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { authLogin, authLogout, authRegister } from './auth';
+import { authLogin, authLogout, authRegister, authVerify } from './auth';
 import { createToken, maxAge } from '../../utils/authUtil';
 import { AuthenticatedRequest } from '../../middleware/authMiddleware';
 
@@ -33,9 +33,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const verifyUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { username, profilePicture, isAdmin  } = req.user
+    const { username, profilePicture, isAdmin  } = await authVerify(req);
     res.status(200).json({ success: true, data: { userId: req.user._id, username, profilePicture, isAdmin} });
   } catch (error) {
+    console.log(error);
     res
       .status(error.statusCode || 500)
       .json({ success: false, error: error.message });

@@ -7,6 +7,7 @@ import {
 import { addUser, findUserByEmail } from '../../data/db/dbUser';
 import { UnauthorizedError } from '../../utils/errors';
 import { Request, Response } from 'express';
+import { AuthenticatedRequest } from '../../middleware/authMiddleware';
 
 export const authRegister = async (
   username: string,
@@ -33,6 +34,13 @@ export const authLogin = async (email: string, password: string) => {
   }
   // Ambigious for privacy reasons
   throw new UnauthorizedError('Incorrect email and/or password');
+};
+
+export const authVerify = async (req: AuthenticatedRequest) => {
+  if (!req.user) {
+    throw new UnauthorizedError('User not authenticated');
+  }
+  return req.user;
 };
 
 export const authLogout = async (req: Request, res: Response) => {
