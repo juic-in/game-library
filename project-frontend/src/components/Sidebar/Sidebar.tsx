@@ -5,7 +5,11 @@ import { useEffect } from 'react';
 interface Props {
   isCollapsed: boolean;
 }
-// TODO: Switch out the font, ugly ahhh font
+/**
+ * TODO: 
+ *    Switch out the font, ugly ahhh font
+ *    Add in gradient lines to separate the sidebar items? 
+ * */ 
 export const Sidebar = ({ isCollapsed }: Props) => {
   useEffect(() => {
     // document.body.style.transition = 'margin-left 0.2s ease';
