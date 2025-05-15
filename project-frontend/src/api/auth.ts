@@ -1,4 +1,5 @@
 import axios from './axios';
+import { handleResponse } from './util';
 
 export const register = async (credentials: {
   username: string;
@@ -9,9 +10,9 @@ export const register = async (credentials: {
     const response = await axios.post('/api/user/auth/register', {
       credentials,
     });
-    return response.data;
+    return handleResponse(response);
   } catch (error) {
-    return { error };
+    return { error: (error as any).message as string };
   }
 };
 
@@ -21,8 +22,17 @@ export const login = async (credentials: {
 }) => {
   try {
     const response = await axios.post('/api/user/auth/login', { credentials });
-    return response.data;
+    return handleResponse(response);
   } catch (error) {
-    return { error };
+    return { error: (error as any).message as string };
+  }
+};
+
+export const verify = async () => {
+  try {
+    const response = await axios.get('/api/user/auth/verify');
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
   }
 };
