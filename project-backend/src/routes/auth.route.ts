@@ -7,6 +7,6 @@ router.post('/register', registerUser);
 
 router.post('/login', loginUser);
 
-router.post('/verify', verifyUser);
+router.get('/verify', verifyUser);
 
 export default router;

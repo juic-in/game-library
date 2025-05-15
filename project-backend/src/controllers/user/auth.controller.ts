@@ -33,7 +33,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const verifyUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    res.status(200).json({ success: true, data: req.user });
+    const { username, profilePicture, isAdmin  } = req.user
+    res.status(200).json({ success: true, data: { userId: req.user._id, username, profilePicture, isAdmin} });
   } catch (error) {
     res
       .status(error.statusCode || 500)

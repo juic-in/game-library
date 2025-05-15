@@ -3,7 +3,7 @@ import {
   createGame,
   deleteGame,
   updateGame,
-} from '../controllers/admin/game.controller';
+} from '../controllers/admin/admin.controller';
 import { requireAdminAuth } from '../middleware/authMiddleware';
 
 const router = express.Router();
