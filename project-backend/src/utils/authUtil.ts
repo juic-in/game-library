@@ -1,7 +1,7 @@
 import { findUserByEmail, findUserByUsername } from '../data/db/dbUser';
 import { BadRequestError } from './errors';
 import * as EmailValidator from 'email-validator';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 export const validateName = async (name: string) => {
   const len = name.length;
@@ -24,7 +24,7 @@ export const validateName = async (name: string) => {
 export const validatePassword = async (password: string) => {
   const len = password.length;
   if (len < 8)
-    throw new BadRequestError('Password must be greater than 8 characyers');
+    throw new BadRequestError('Password must be greater than 8 characters');
   else if (len > 128)
     throw new BadRequestError(
       'Password is too long, please limit it to under 128 characters'
@@ -41,20 +41,22 @@ export const validatePassword = async (password: string) => {
 
 export const validateEmail = async (email: string) => {
   if (!email) throw new BadRequestError('Please enter an email');
-  if (!EmailValidator.validate(email))
-    throw new BadRequestError(`${email} is not a valid email`);
-  else if (await findUserByEmail(email))
-    throw new BadRequestError(`${email} is already taken`);
+  if (!EmailValidator.validate(email)) {
+    throw new BadRequestError(`Not a valid email`);
+  }
+  if (await findUserByEmail(email)) {
+    throw new BadRequestError(`Not a valid email - already in use`);
+  }
 };
 
-export const maxAge = 3 * 24 * 60 * 60
+export const maxAge = 3 * 24 * 60 * 60;
 
 export const createToken = (id: string) => {
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
-    throw new Error("JWT_SECRET not defined in environment variables");
+    throw new Error('JWT_SECRET not defined in environment variables');
   }
 
-  return jwt.sign({ id }, jwtSecret, {expiresIn: maxAge})
-}
+  return jwt.sign({ id }, jwtSecret, { expiresIn: maxAge });
+};

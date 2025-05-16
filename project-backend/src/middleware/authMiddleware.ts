@@ -21,7 +21,6 @@ export const requireUserAuth = async (
       }
 
       req.user = decoded as JwtPayload;
-
       next();
     }
   );
