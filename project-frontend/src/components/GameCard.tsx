@@ -34,7 +34,7 @@ export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
       transition="all 0.2s"
       _hover={{
         boxShadow: '2xl',
-        transform: 'scale(1.005)',
+        transform: 'scale(1.02)',
       }}
       bg={cardBg}
       height={cardHeight}
