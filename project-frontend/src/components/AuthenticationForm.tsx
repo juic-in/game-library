@@ -2,10 +2,18 @@ import { Box, Button, Flex, Heading, Input, Text } from '@chakra-ui/react';
 import React from 'react';
 import { login, register } from '../api/auth';
 import { useModal } from '../context/ModalProvider';
+import { useAuth } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 interface Credentials {
-  email: string;
   username?: string;
+  email: string;
+  password: string;
+}
+
+interface Errors {
+  username: string;
+  email: string;
   password: string;
 }
 
@@ -14,13 +22,47 @@ interface Props {
 }
 
 export const AuthenticationForm = ({ mode }: Props) => {
+  const { isAuthenticated, login: loginAuth } = useAuth();
+  const authMethod = mode === 'login' ? login : register;
+
+  // Disable access to this page if already logged in
+  let navigate = useNavigate();
+  if (isAuthenticated) {
+    navigate('/');
+  }
+
   const [formData, setFormData] = React.useState<Credentials>({
     email: '',
-    username: '',
     password: '',
   });
+
+  const [errors, setErrors] = React.useState<Errors>({
+    username: '',
+    email: '',
+    password: '',
+  });
+
   const { openErrorModal } = useModal();
-  const authMethod = mode === 'login' ? login : register;
+
+  const handleErrors = (message: string) => {
+    const errorMessages: Errors = {
+      username: '',
+      email: '',
+      password: '',
+    };
+
+    if (message.toLowerCase().includes('email')) {
+      errorMessages.email = message;
+    }
+    if (message.toLowerCase().includes('password')) {
+      errorMessages.password = message;
+    }
+    if (message.toLowerCase().includes('username')) {
+      errorMessages.username = message;
+    }
+
+    setErrors(errorMessages);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,8 +74,28 @@ export const AuthenticationForm = ({ mode }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setErrors({
+      username: '',
+      email: '',
+      password: '',
+    });
     try {
+      console.log('Form data:', formData);
+      const response = await authMethod(formData as Required<typeof formData>);
+
+      // If is not an error from the backend
+      if ('error' in response) {
+        openErrorModal(response.error);
+        return;
+      }
+      const { data } = response;
+      if (data.success) {
+        loginAuth();
+        navigate('/');
+      } else {
+        handleErrors(data.error);
+        return;
+      }
     } catch (error) {
       openErrorModal('An error occurred during authentication.');
     }
@@ -56,7 +118,7 @@ export const AuthenticationForm = ({ mode }: Props) => {
       borderRadius="md"
       borderWidth={4}
       borderColor="gray.300"
-      zIndex={9999}
+      zIndex={0}
     >
       <Heading m={12} textAlign="center">
         {mode.toUpperCase()}
@@ -68,23 +130,55 @@ export const AuthenticationForm = ({ mode }: Props) => {
         bgGradient="linear(to-r, gray.300, gray.700)"
       />
 
-      <Flex as="form" px={16} py={20} w="100%" flexDirection="column">
-        {/* Conditional rendering for email block */}
+      <Flex
+        as="form"
+        px={16}
+        py={14}
+        w="100%"
+        flexDirection="column"
+        onSubmit={handleSubmit}
+      >
+        {/* Conditional rendering for username block */}
         {mode === 'register' && (
-          <Box mb={4}>
+          <Box className="name-authentication-block">
             <Text mb={2} display="inline-block">
-              Email
+              Username
             </Text>
-            <Input type="text" name="email" required borderColor="gray.300" />
+            <Input
+              type="text"
+              name="username"
+              required
+              borderColor="gray.300"
+              onChange={handleInputChange}
+            />
+            <Text
+              className="error-text"
+              minHeight="25px"
+              color="red.500"
+              my={3}
+            >
+              {errors.username && errors.username}
+            </Text>
           </Box>
         )}
-        <Box mb={4}>
+        <Box className="email-authentication-block">
           <Text mb={2} display="inline-block">
-            Username
+            Email
           </Text>
-          <Input type="text" name="username" required borderColor="gray.300" />
+          <Input
+            type="text"
+            name="email"
+            required
+            borderColor="gray.300"
+            onChange={handleInputChange}
+          />
+          {/* Could turn these into components */}
+          <Text className="error-text" minHeight="25px" color="red.500" my={3}>
+            {errors.email && errors.email}
+          </Text>
         </Box>
-        <Box mb={4}>
+
+        <Box className="password-authentication-block">
           <Text mb={2} display="inline-block">
             Password
           </Text>
@@ -93,9 +187,13 @@ export const AuthenticationForm = ({ mode }: Props) => {
             name="password"
             required
             borderColor="gray.300"
+            onChange={handleInputChange}
           />
+          <Text className="error-text" minHeight="25px" color="red.500" my={3}>
+            {errors.password && errors.password}
+          </Text>
         </Box>
-        <Box position="fixed" bottom={32}>
+        <Box position="fixed" bottom={20}>
           <Button
             type="submit"
             bgGradient="linear(to-t, gray.200, gray.300)"
