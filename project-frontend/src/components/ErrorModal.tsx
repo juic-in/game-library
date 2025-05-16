@@ -1,3 +1,4 @@
+// ErrorModal.tsx
 import {
   Modal,
   ModalOverlay,
@@ -7,16 +8,13 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
+import { useModal } from '../context/ModalProvider';
 
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-  errorMessage: string;
-}
+export const ErrorModal = () => {
+  const { isOpen, errorMessage, closeErrorModal } = useModal();
 
-export const ErrorModal = ({ isOpen, onClose, errorMessage }: Props) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={closeErrorModal}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Error</ModalHeader>
@@ -24,7 +22,7 @@ export const ErrorModal = ({ isOpen, onClose, errorMessage }: Props) => {
           <p>{errorMessage || 'An unknown error occurred.'}</p>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" onClick={onClose}>
+          <Button colorScheme="blue" onClick={closeErrorModal}>
             Close
           </Button>
         </ModalFooter>
@@ -32,4 +30,3 @@ export const ErrorModal = ({ isOpen, onClose, errorMessage }: Props) => {
     </Modal>
   );
 };
-
