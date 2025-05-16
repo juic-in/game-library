@@ -66,6 +66,14 @@ export const AuthenticationForm = ({ mode }: Props) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Clear errors on change of input, i hate websites that keep error messages even after i change the input
+    setErrors({
+      username: '',
+      email: '',
+      password: '',
+    });
+    
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -74,11 +82,7 @@ export const AuthenticationForm = ({ mode }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({
-      username: '',
-      email: '',
-      password: '',
-    });
+
     try {
       console.log('Form data:', formData);
       const response = await authMethod(formData as Required<typeof formData>);
@@ -89,6 +93,7 @@ export const AuthenticationForm = ({ mode }: Props) => {
         return;
       }
       const { data } = response;
+      // No switch statement for status, since authentication is either true or false
       if (data.success) {
         loginAuth();
         navigate('/');
