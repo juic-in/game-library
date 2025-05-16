@@ -7,9 +7,9 @@ export const register = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await axios.post('user/auth/register', {
+    const response = await axios.post('user/auth/register', 
       credentials,
-    });
+    );
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
@@ -21,7 +21,7 @@ export const login = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await axios.post('user/auth/login', { credentials });
+    const response = await axios.post('user/auth/login', credentials );
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
