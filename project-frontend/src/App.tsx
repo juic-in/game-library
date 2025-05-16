@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import { Profile } from './pages/Profile';
 import { HomePage } from './pages/HomePage';
 import { Settings } from './pages/Settings';
+import { AuthenticationPage } from './pages/AuthenticationPage';
+import { ErrorModal } from './components/ErrorModal';
 
 function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(true);
@@ -15,17 +17,21 @@ function App() {
   const toggleSidebar = () => setSideBarCollapsed(!sideBarCollapsed);
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <Navbar toggleSidebar={toggleSidebar} />
-      <Sidebar isCollapsed={sideBarCollapsed} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/discover" element={<DiscoverPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-    </Box>
+    <>
+      <ErrorModal />
+      <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+        <Navbar toggleSidebar={toggleSidebar} />
+        <Sidebar isCollapsed={sideBarCollapsed} />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/auth" element={<AuthenticationPage />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Box>
+    </>
   );
 }
 export default App;
