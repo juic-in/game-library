@@ -2,7 +2,7 @@ import { SimpleGrid, Flex } from '@chakra-ui/react';
 import { GameCard } from '../components/GameCard'; // Assuming the path is correct
 import { useEffect, useState } from 'react';
 import { getGamesList } from '../api/game';
-import { ErrorModal } from '../components/ErrorModal';
+import { useModal } from '../context/ModalProvider';
 
 interface GameCardInfo {
   _id: string;
@@ -12,16 +12,15 @@ interface GameCardInfo {
 
 export const DiscoverPage = () => {
   const [games, setGames] = useState<GameCardInfo[]>([]);
-  const [error, setError] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { openErrorModal } = useModal();
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await getGamesList();
 
       if ('error' in response) {
-        setError(response.error);
-        setIsModalOpen(true);
+        openErrorModal(response.error);
         return;
       }
       const { status, data } = response;
@@ -85,14 +84,6 @@ export const DiscoverPage = () => {
             )}
         </SimpleGrid>
       </Flex>
-
-      {error && (
-        <ErrorModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          errorMessage={error}
-        />
-      )}
     </>
   );
 };
