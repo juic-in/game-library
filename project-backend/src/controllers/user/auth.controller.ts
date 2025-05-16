@@ -5,12 +5,17 @@ import { AuthenticatedRequest } from '../../middleware/authMiddleware';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
-    const result = await authRegister(name, email, password);
+    const { username, email, password } = req.body;
+    const result = await authRegister(username, email, password);
     const token = createToken(result._id.toString());
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: maxAge * 1000,
+      secure: process.env.NODE_ENV === 'production',
+    });
     res.status(200).json({ success: true, data: result._id });
   } catch (error) {
+    console.log(error);
     res
       .status(error.statusCode || 500)
       .json({ success: false, error: error.message });
@@ -22,7 +27,11 @@ export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const result = await authLogin(email, password);
     const token = createToken(result._id.toString());
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: maxAge * 1000,
+      secure: process.env.NODE_ENV === 'production',
+    });
     res.status(200).json({ success: true, data: result._id });
   } catch (error) {
     res
@@ -33,8 +42,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const verifyUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { username, profilePicture, isAdmin  } = await authVerify(req);
-    res.status(200).json({ success: true, data: { userId: req.user._id, username, profilePicture, isAdmin} });
+    const { _id: userId, username, profilePicture, isAdmin } = await authVerify(req);
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: { userId, username, profilePicture, isAdmin },
+      });
   } catch (error) {
     console.log(error);
     res
