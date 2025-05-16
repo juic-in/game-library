@@ -13,7 +13,7 @@ interface Props {
 export const Sidebar = ({ isCollapsed }: Props) => {
   useEffect(() => {
     // document.body.style.transition = 'margin-left 0.2s ease';
-    document.body.style.marginLeft = isCollapsed ? '60px' : '155px';
+    document.body.style.marginLeft = isCollapsed ? '60px' : '160px';
 
     return () => {
       document.body.style.marginLeft = '0';
@@ -24,7 +24,7 @@ export const Sidebar = ({ isCollapsed }: Props) => {
     <Box
       bg="gray.800"
       color="white"
-      w={isCollapsed ? '60px' : '155px'}
+      w={isCollapsed ? '60px' : '160px'}
       minH="100vh"
       // transition="width 0.2s ease"
       position={'fixed'}

@@ -1,9 +1,9 @@
 import { useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 import { SidebarItem } from './SidebarItem';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../AuthProvider';
 import { HiOutlineHome } from 'react-icons/hi2';
 import { FiSettings, FiUser, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthProvider';
 
 interface Props {
   isCollapsed: boolean;

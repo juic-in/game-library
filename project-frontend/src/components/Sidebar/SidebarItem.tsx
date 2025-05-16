@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 export const SidebarItem = ({ icon, label, isCollapsed, onClick }: Props) => {
   return (
     <Box
+      className="sidebar-item"
       onClick={onClick}
       cursor="pointer"
       _hover={{ bg: 'gray.700' }}
@@ -19,8 +20,8 @@ export const SidebarItem = ({ icon, label, isCollapsed, onClick }: Props) => {
       borderRadius="md"
       role="group"
     >
-      <HStack spacing={4}>
-        <Icon as={icon} boxSize={5} />
+      <Flex gap={4} align="center">
+        <Icon as={icon} boxSize={5} ml={1}/>
 
         {!isCollapsed && (
           <Text
@@ -31,7 +32,7 @@ export const SidebarItem = ({ icon, label, isCollapsed, onClick }: Props) => {
             {label}
           </Text>
         )}
-      </HStack>
+      </Flex>
     </Box>
   );
 };
