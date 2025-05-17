@@ -3,13 +3,35 @@ import { Box, Container, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
+import { authLogout } from '../api/auth';
+import { useModal } from '../context/ModalProvider';
 
 interface Props {
   toggleSidebar: () => void;
 }
 
 export const Navbar = ({ toggleSidebar }: Props) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
+  const { openErrorModal } = useModal();
+
+  const handleLogout = async () => {
+    try {
+      const response = await authLogout();
+
+      if ('error' in response) {
+        openErrorModal(response.error);
+        return;
+      }
+
+      if (response.status === 200) {
+        logout();
+        return;
+      }
+    } catch (error) {
+      openErrorModal('An error occurred during authentication.');
+    }
+  };
+
   useEffect(() => {
     // Header height + Gradient bar height
     document.body.style.marginTop = '65px';
@@ -69,24 +91,56 @@ export const Navbar = ({ toggleSidebar }: Props) => {
           >
             <Link to={'/'}>GameXUnify</Link>
           </Text>
-          {!isAuthenticated && (
-            <Flex alignItems={'center'} justifyContent={'center'}>
-              <Text
-                fontSize={{ base: '16', sm: '20' }}
-                textTransform={'uppercase'}
-                textAlign={'center'}
-                userSelect={'none'}
-                color="white"
-                mr={5}
-              >
-                <Link to={'/auth?mode=register'}>Register</Link>
-                <Text as="span" mx={2} color="gray.500">
+
+          <Flex alignItems="center" justifyContent="center" mr={4} >
+            {!isAuthenticated ? (
+              <>
+                <Link to="/auth?mode=register">
+                  <Text
+                    fontSize={{ base: '16', sm: '20' }}
+                    textTransform="uppercase"
+                    textAlign="center"
+                    userSelect="none"
+                    color="white"
+                    mr={2}
+                  >
+                    Register
+                  </Text>
+                </Link>
+                <Text
+                  mx={2}
+                  color="gray.500"
+                  fontSize={{ base: '16', sm: '20' }}
+                >
                   |
                 </Text>
-                <Link to={'/auth?mode=login'}>Login</Link>
+                <Link to="/auth?mode=login">
+                  <Text
+                    fontSize={{ base: '16', sm: '20' }}
+                    textTransform="uppercase"
+                    textAlign="center"
+                    userSelect="none"
+                    color="white"
+                    ml={2}
+                  >
+                    Login
+                  </Text>
+                </Link>
+              </>
+            ) : (
+              <Text
+                fontSize={{ base: '16', sm: '20' }}
+                textTransform="uppercase"
+                textAlign="center"
+                userSelect="none"
+                color="white"
+                onClick={handleLogout}
+                cursor="pointer"
+              >
+                Logout
               </Text>
-            </Flex>
-          )}
+            )}
+          </Flex>
         </Flex>
         <Box
           height="3px"
