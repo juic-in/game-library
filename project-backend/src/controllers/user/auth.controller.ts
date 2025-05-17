@@ -1,21 +1,20 @@
 import { Request, Response } from 'express';
-import { authLogin, authLogout, authRegister, authVerify } from './auth';
+import { authLogin, authLogout, authRegister, authVerify, JwtPayloadUser } from './auth';
 import { createToken, maxAge } from '../../utils/authUtil';
 import { AuthenticatedRequest } from '../../middleware/authMiddleware';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-    const result = await authRegister(username, email, password);
-    const token = createToken(result._id.toString());
+    const jwtPayload = await authRegister(username, email, password);
+    const token = createToken(jwtPayload);
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: maxAge * 1000,
       secure: process.env.NODE_ENV === 'production',
     });
-    res.status(200).json({ success: true, data: result._id });
+    res.status(200).json({ success: true, data: jwtPayload.userId });
   } catch (error) {
-    console.log(error);
     res
       .status(error.statusCode || 500)
       .json({ success: false, error: error.message });
@@ -25,14 +24,14 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const result = await authLogin(email, password);
-    const token = createToken(result._id.toString());
+    const jwtPayload = await authLogin(email, password);
+    const token = createToken(jwtPayload);
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: maxAge * 1000,
       secure: process.env.NODE_ENV === 'production',
     });
-    res.status(200).json({ success: true, data: result._id });
+    res.status(200).json({ success: true, data: jwtPayload.userId });
   } catch (error) {
     res
       .status(error.statusCode || 500)
@@ -42,15 +41,12 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const verifyUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { _id: userId, username, profilePicture, isAdmin } = await authVerify(req);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: { userId, username, profilePicture, isAdmin },
-      });
+    const response = await authVerify(req) as JwtPayloadUser;
+    res.status(200).json({
+      success: true,
+      data: response,
+    });
   } catch (error) {
-    console.log(error);
     res
       .status(error.statusCode || 500)
       .json({ success: false, error: error.message });
