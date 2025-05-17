@@ -4,6 +4,6 @@ export const handleResponse = (response: AxiosResponse) => {
   const { status, data } = response;
   return {
     status,
-    data,
+    payload: data,
   };
 };
