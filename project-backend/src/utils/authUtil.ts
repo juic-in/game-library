@@ -1,3 +1,4 @@
+import { JwtPayloadUser } from '../controllers/user/auth';
 import { findUserByEmail, findUserByUsername } from '../data/db/dbUser';
 import { BadRequestError } from './errors';
 import * as EmailValidator from 'email-validator';
@@ -51,12 +52,11 @@ export const validateEmail = async (email: string) => {
 
 export const maxAge = 3 * 24 * 60 * 60;
 
-export const createToken = (id: string) => {
+export const createToken = (userData: JwtPayloadUser) => {
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
     throw new Error('JWT_SECRET not defined in environment variables');
   }
-
-  return jwt.sign({ id }, jwtSecret, { expiresIn: maxAge });
+  return jwt.sign(userData, jwtSecret, { expiresIn: maxAge });
 };
