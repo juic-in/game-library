@@ -5,7 +5,7 @@ import {
   ReactNode,
   useState,
 } from 'react';
-import { verify } from '../api/auth';
+import { authVerify } from '../api/auth';
 
 interface User {
   userId: string;
@@ -43,13 +43,13 @@ export const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await verify();
+      const response = await authVerify();
       if ('error' in response) {
         setIsAuthenticated(false);
         return;
       }
-      const { status, data } = response;
-      switch (status) {
+      const { data, success } = response.payload;
+      switch (response.status) {
         case 200:
           setIsAuthenticated(true);
           setUser(data);

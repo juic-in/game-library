@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading, Input, Text } from '@chakra-ui/react';
 import React from 'react';
-import { login, register } from '../api/auth';
+import { authLogin, authRegister } from '../api/auth';
 import { useModal } from '../context/ModalProvider';
 import { useAuth } from '../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +22,8 @@ interface Props {
 }
 
 export const AuthenticationForm = ({ mode }: Props) => {
-  const { isAuthenticated, login: loginAuth } = useAuth();
-  const authMethod = mode === 'login' ? login : register;
+  const { isAuthenticated, login } = useAuth();
+  const authMethod = mode === 'login' ? authLogin : authRegister;
 
   // Disable access to this page if already logged in
   let navigate = useNavigate();
@@ -50,7 +50,6 @@ export const AuthenticationForm = ({ mode }: Props) => {
       email: '',
       password: '',
     };
-
     if (message.toLowerCase().includes('email')) {
       errorMessages.email = message;
     }
@@ -84,24 +83,24 @@ export const AuthenticationForm = ({ mode }: Props) => {
     e.preventDefault();
 
     try {
-      console.log('Form data:', formData);
       const response = await authMethod(formData as Required<typeof formData>);
 
       // If is not an error from the backend
       if ('error' in response) {
         openErrorModal(response.error);
         return;
-      }
-      const { data } = response;
+      } 
+      const { data, success } = response.payload;
       // No switch statement for status, since authentication is either true or false
-      if (data.success) {
-        loginAuth();
+      if (success) {
+        login();
         navigate('/');
       } else {
         handleErrors(data.error);
         return;
       }
     } catch (error) {
+      console.error('Error during authentication:', error);
       openErrorModal('An error occurred during authentication.');
     }
   };
