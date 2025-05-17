@@ -1,36 +1,43 @@
 import axios from './axios';
 import { handleResponse } from './util';
 
-export const register = async (credentials: {
+export const authRegister = async (credentials: {
   username: string;
   email: string;
   password: string;
 }) => {
   try {
-    const response = await axios.post('user/auth/register', 
-      credentials,
-    );
+    const response = await axios.post('user/auth/register', credentials);
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
   }
 };
 
-export const login = async (credentials: {
+export const authLogin = async (credentials: {
   email: string;
   password: string;
 }) => {
   try {
-    const response = await axios.post('user/auth/login', credentials );
+    const response = await axios.post('user/auth/login', credentials);
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
   }
 };
 
-export const verify = async () => {
+export const authVerify = async () => {
   try {
     const response = await axios.get('user/auth/verify');
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
+  }
+};
+
+export const authLogout = async () => {
+  try {
+    const response = await axios.post('user/auth/logout');
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
