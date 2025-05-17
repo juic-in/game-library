@@ -7,6 +7,7 @@ export const AuthenticationPage = () => {
   const mode = params.get('mode') as string;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
 
     return () => {
@@ -14,8 +15,5 @@ export const AuthenticationPage = () => {
     };
   }, []);
 
-
-  return (
-    <AuthenticationForm mode={mode} />
-  );
+  return <AuthenticationForm mode={mode} />;
 };

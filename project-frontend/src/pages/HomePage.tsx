@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 
 export const HomePage = () => {
-  return (
-    <div>HomePage</div>
-  )
-}
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return <div>HomePage</div>;
+};

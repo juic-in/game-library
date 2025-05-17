@@ -23,12 +23,12 @@ export const DiscoverPage = () => {
         openErrorModal(response.error);
         return;
       }
-      const { status, data } = response;
+      const { status } = response;
+      const { data } = response.payload;
       switch (status) {
         case 200:
           const keysToKeep = ['_id', 'name', 'description'];
-
-          const filteredData: GameCardInfo[] = data.data.map(
+          const filteredData: GameCardInfo[] = data.map(
             (obj: Record<string, any>): GameCardInfo => {
               const filtered: Partial<GameCardInfo> = {};
               keysToKeep.forEach((key: string) => {
