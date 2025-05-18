@@ -1,4 +1,4 @@
-import { SimpleGrid, Flex } from '@chakra-ui/react';
+import { SimpleGrid, Flex, Box, Input, HStack } from '@chakra-ui/react';
 import { GameCard } from '../components/GameCard'; // Assuming the path is correct
 import { useEffect, useState } from 'react';
 import { getGamesList } from '../api/game';
@@ -10,8 +10,16 @@ interface GameCardInfo {
   description: string;
 }
 
+  // TODO: Set up pagination, add limits to  backend, also introduce limits to backend
+  
+
+const LIMIT = 50
+
 export const DiscoverPage = () => {
   const [games, setGames] = useState<GameCardInfo[]>([]);
+
+  const [searchQuery, setSearcyQuery] = useState<string>('');
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const { openErrorModal } = useModal();
 
@@ -55,9 +63,15 @@ export const DiscoverPage = () => {
         className="main-library-container"
         justifyContent="center"
         alignItems="center"
+        flexDirection='column'
         p={10}
+        gap={5}
       >
+        <HStack>
+          <Input name="search-item"/>
+        </HStack>
         <SimpleGrid
+          className="games-container"
           columns={[1, 1, 2, 3, 4, 5]} // Added `6` columns for large screens (2xl)
           spacing={[3, 4, 5]} // Adjust spacing for different screen sizes
         >
