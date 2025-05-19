@@ -35,6 +35,15 @@ export const authVerify = async () => {
   }
 };
 
+export const authVerifyAdmin = async () => {
+  try {
+    const response = await axios.get('user/auth/verify-admin');
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string } 
+  }
+}
+
 export const authLogout = async () => {
   try {
     const response = await axios.post('user/auth/logout');
