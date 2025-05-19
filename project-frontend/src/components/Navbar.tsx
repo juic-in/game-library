@@ -34,7 +34,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
 
   useEffect(() => {
     // Header height + Gradient bar height
-    document.body.style.marginTop = '65px';
+    document.body.style.marginTop = '67px';
 
     return () => {
       document.body.style.marginTop = '0';
