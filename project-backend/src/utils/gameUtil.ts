@@ -1,6 +1,23 @@
 import { validate } from 'email-validator';
 import { BadRequestError } from './errors';
 import { Game, InitialGame } from './interface';
+import {
+  AestheticTag,
+  AllPlatforms,
+  AllTags,
+  AudienceTag,
+  CloudPlatform,
+  ConsolePlatform,
+  FeatureTag,
+  GameplayTag,
+  Genre,
+  LegacyPlatform,
+  MechanicTag,
+  MobilePlatform,
+  PCPlatform,
+  PerspectiveTag,
+  ThemeTag,
+} from './enums';
 
 export const validateGameName = (name: string) => {
   if (/[^a-zA-Z0-9_\-',\.\s]/.test(name))
@@ -22,233 +39,51 @@ export const validateGameDescription = (description: string) => {
 };
 
 export const validateGameGenres = (genres: string[]) => {
-  const allowedGenres = [
-    'Simulation',
-    'Fighting',
-    'Puzzle',
-    'Adventure',
-    'Sandbox',
-    'Shooter',
-    'Sports',
-    'RPG',
-    'Survival',
-    'Action-Adventure',
-    'Platformer',
-    'Racing',
-    'Action',
-    'Casual',
-    'FPS',
-    'MMO',
-    'MOBA',
-    'Strategy',
-    'Party',
-    'RTS',
-    'Stealth',
-    'Tactical',
-    'Turn-Based',
-    'Card Game',
-    'Idle',
-    'Metroidvania',
-    'Roguelike',
-    'Roguelite',
-    'Visual Novel',
-    'Horror',
-    'Narrative',
-    'Music',
-    'Rhythm',
-    'Trivia',
-    'Board Game',
-    'Education',
-    'Arcade',
-    'Open World',
-    'Bullet Hell',
-    'Third-Person Shooter',
-    'Top-Down Shooter',
-    "Beat 'em Up",
-    'Tower Defense',
-    'City Builder',
-    'Dating Sim',
-    'Tycoon',
-    '4X',
-    'MMORPG',
-    'Battle Royale',
-    'Dungeon Crawler',
-    'Text-Based',
-    'Experimental',
-    'Art Game',
-    'Interactive Fiction',
-    'Anime',
-  ];
+  const allowedGenres = Object.values(Genre);
 
-  if (genres.some((genre) => !allowedGenres.includes(genre)))
-    throw new BadRequestError(`This game contains an invalid genre`);
+  const invalidGenres = genres.filter(
+    (genre) => !allowedGenres.includes(genre as Genre)
+  );
+
+  if (invalidGenres.length > 0)
+    throw new BadRequestError(`Invalid genres: ${invalidGenres.join(', ')}`);
 };
 
 export const validateGameTags = (tags: string[]) => {
   const allowedTags = [
-    // Gameplay Style
-    'Multiplayer',
-    'Singleplayer',
-    'Co-op',
-    'Online Co-op',
-    'Local Co-op',
-    'PvP',
-    'PvE',
-    'Split Screen',
-    'Controller Support',
-    'Cross-Platform',
-    'Replayability',
-
-    // Tone & Theme
-    'Dark',
-    'Funny',
-    'Narrative',
-    'Emotional',
-    'Atmospheric',
-    'Sci-Fi',
-    'Fantasy',
-    'Cyberpunk',
-    'Post-Apocalyptic',
-    'Historical',
-    'Modern',
-    'Medieval',
-    'Pixel Art',
-    'Cartoon',
-    'Realistic',
-    'Anime',
-
-    // Mechanics
-    'Open World',
-    'Exploration',
-    'Base Building',
-    'Crafting',
-    'Loot',
-    'Leveling',
-    'Upgrades',
-    'Resource Management',
-    'Permadeath',
-    'Physics-Based',
-    'Turn-Based',
-    'Real-Time',
-    'Time Management',
-    'Stealth',
-    'Tactical',
-    'Deckbuilding',
-
-    // Perspective
-    'First-Person',
-    'Third-Person',
-    'Top-Down',
-    'Isometric',
-    'Side-Scroller',
-    '2D',
-    '3D',
-    'VR',
-
-    // Visual/Audio
-    'Minimalist',
-    'Beautiful',
-    'Cinematic',
-    'Stylized',
-    'Voice Acting',
-    'Dynamic Soundtrack',
-    'Ambient Music',
-
-    // Special Features
-    'Early Access',
-    'Moddable',
-    'Achievements',
-    'Procedural Generation',
-    'Sandbox Mode',
-    'Story Rich',
-    'Short Game',
-    'Long Campaign',
-    'Multiple Endings',
-    'Choices Matter',
-    'Hardcore',
-    'Speedrun Friendly',
-
-    // Audience
-    'Family Friendly',
-    'Mature',
-    'Casual',
-    'Competitive',
-    'Educational',
-    'Accessibility Features',
+    ...Object.values(GameplayTag),
+    ...Object.values(ThemeTag),
+    ...Object.values(MechanicTag),
+    ...Object.values(PerspectiveTag),
+    ...Object.values(AestheticTag),
+    ...Object.values(FeatureTag),
+    ...Object.values(AudienceTag),
   ];
-  if (tags.some((tag) => !allowedTags.includes(tag)))
-    throw new BadRequestError('This game contains an invalid tag');
+
+  const invalidTags = tags.filter(
+    (tag) => !allowedTags.includes(tag as AllTags)
+  );
+  if (invalidTags.length > 0)
+    throw new BadRequestError(`Invalid tags: ${invalidTags.join(', ')}`);
 };
 
 export const validateGamePlatforms = (platforms: string[]) => {
-  const pcPlatforms = [
-    'Windows',
-    'macOS',
-    'Linux',
-    'Steam',
-    'Epic Games Store',
-    'GOG',
-    'Origin',
-    'Battle.net',
-    'Ubisoft Connect',
-    'Microsoft Store',
-    'Itch.io',
-  ];
-
-  const consolePlatforms = [
-    'PlayStation 5',
-    'PlayStation 4',
-    'PlayStation 3',
-    'Xbox Series X|S',
-    'Xbox One',
-    'Xbox 360',
-    'Nintendo Switch',
-    'Wii U',
-    'Wii',
-    'GameCube',
-    'Nintendo 64',
-    'PlayStation Vita',
-    'PlayStation Portable (PSP)',
-  ];
-  const mobilePlatforms = [
-    'iOS',
-    'Android',
-    'Apple Arcade',
-    'Google Play',
-    'Amazon Appstore',
-  ];
-
-  const legacyPlatforms = [
-    'Nintendo 3DS',
-    'Nintendo DS',
-    'Game Boy Advance',
-    'Game Boy',
-    'Sega Genesis',
-    'Dreamcast',
-    'SNES',
-    'NES',
-    'Atari 2600',
-  ];
-
-  const cloudPlatforms = [
-    'GeForce NOW',
-    'Xbox Cloud Gaming (xCloud)',
-    'PlayStation Now',
-    'Amazon Luna',
-    'Google Stadia (discontinued)',
-    'NVIDIA Shield',
-  ];
-
   const allowedPlatforms = [
-    ...pcPlatforms,
-    ...consolePlatforms,
-    ...mobilePlatforms,
-    ...legacyPlatforms,
-    ...cloudPlatforms,
+    ...Object.values(PCPlatform),
+    ...Object.values(ConsolePlatform),
+    ...Object.values(MobilePlatform),
+    ...Object.values(LegacyPlatform),
+    ...Object.values(CloudPlatform),
   ];
 
-  if (platforms.some((platform) => !allowedPlatforms.includes(platform)))
-    throw new BadRequestError('This game contains an invalid platform');
+  const invalidPlatforms = platforms.filter(
+    (platform) => !allowedPlatforms.includes(platform as AllPlatforms)
+  );
+
+  if (invalidPlatforms.length > 0)
+    throw new BadRequestError(
+      `Invalid platforms: ${invalidPlatforms.join(', ')}`
+    );
 };
 
 export const validateGamePrice = (priceCents: number) => {
