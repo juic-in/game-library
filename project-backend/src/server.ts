@@ -1,4 +1,11 @@
-import express, { json, Request, Response, Express } from 'express';
+import express, {
+  json,
+  Request,
+  Response,
+  Express,
+  ErrorRequestHandler,
+  NextFunction,
+} from 'express';
 import { connectToDatabase } from './data/db/dbConnection';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -34,6 +41,15 @@ connectToDatabase().then(() => {
   app.use('/api/user/auth', authRoutes);
   app.use('/api/user/', userRoutes);
   app.use('/api/public', publicRoutes);
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error('Global error:', err);
+
+    res.status(err.statusCode || 500).json({
+      success: false,
+      error: err.message || 'Internal server error',
+    });
+  });
 
   app.use((req: Request, res: Response) => {
     const error = `
