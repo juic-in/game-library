@@ -10,6 +10,7 @@ import { HomePage } from './pages/HomePage';
 import { Settings } from './pages/Settings';
 import { AuthenticationPage } from './pages/AuthenticationPage';
 import { ErrorModal } from './components/ErrorModal';
+import { AdministrationPage } from './pages/AdministrationPage';
 
 function App() {
   const [sideBarCollapsed, setSideBarCollapsed] = useState(true);
@@ -29,6 +30,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/admin" element={<AdministrationPage />} />
         </Routes>
       </Box>
     </>
