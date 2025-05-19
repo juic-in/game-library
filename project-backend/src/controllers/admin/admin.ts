@@ -1,11 +1,17 @@
-import { addGame, clearGames, deleteGameById, findGameById, findGameByNameAndReleaseDate, updateGame } from "../../data/db/dbGame";
-import { clearUsers } from "../../data/db/dbUser";
-import { BadRequestError } from "../../utils/errors";
-import { validateGameName, validateGameDescription } from "../../utils/gameUtil";
-import { Game } from "../../utils/interface";
+import {
+  addGame,
+  clearGames,
+  deleteGameById,
+  findGameById,
+  findGameByNameAndReleaseDate,
+  updateGame,
+} from '../../data/db/dbGame';
+import { clearUsers } from '../../data/db/dbUser';
+import { BadRequestError } from '../../utils/errors';
+import { validateGame } from '../../utils/gameUtil';
+import { Game, InitialGame } from '../../utils/interface';
 
-
-export const adminAddGame = async (game: Game) => {
+export const adminAddGame = async (game: InitialGame) => {
   // TODO: Update this to be more lenient
   const releaseDate = game.releaseDate || new Date().toISOString();
   try {
@@ -22,8 +28,7 @@ export const adminAddGame = async (game: Game) => {
     throw new BadRequestError(error.message);
   }
   try {
-    validateGameName(game.name);
-    validateGameDescription(game.description);
+    validateGame(game);
   } catch (error) {
     throw new BadRequestError(error.message);
   }
@@ -33,25 +38,18 @@ export const adminAddGame = async (game: Game) => {
   return { gameId: result._id };
 };
 
-export const adminUpdateGame = async (
-  gameId: string,
-  game: {
-    name?: string;
-    description?: string;
-    genres?: string[];
-    releaseDate?: string;
-    developer?: string;
-    publisher?: string;
-    image?: string;
-    priceCents?: number;
-    platforms?: string[];
-    tags?: string[];
-  }
-) => {
+export const adminUpdateGame = async (gameId: string, game: Game) => {
   const existingGame = await findGameById(gameId);
   if (!existingGame) {
     throw new BadRequestError(`Game with ID ${gameId} does not exist.`);
   }
+
+  try {
+    validateGame(game);
+  } catch (error) {
+    throw new BadRequestError(error.message);
+  }
+
   await updateGame(gameId, game);
   return {};
 };
@@ -69,5 +67,5 @@ export const adminDeleteGame = async (gameId: string) => {
 export async function clearAll() {
   await clearGames();
   await clearUsers();
-  return {}
+  return {};
 }

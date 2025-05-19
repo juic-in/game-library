@@ -12,22 +12,25 @@ export interface User {
   description?: string;
 }
 
-export interface Game {
-  gameId: string;
-  rating?: number;
-  reviews?: string[];
+export interface InitialGame {
   name: string;
   description: string;
-  image?: string;
-  priceCents: number;
+  image: string;
   releaseDate: string;
+  priceCents: number;
   developer: string;
   publisher: string;
-  genres?: string[];
-  platforms?: string[];
-  tags?: string[];
-  reviewsCount?: number;
-  ratingCount?: number;
+  genres: string[];
+  platforms: string[];
+  tags: string[];
+}
+
+export interface Game extends InitialGame {
+  gameId: string;
+  rating: number;
+  reviews: string[];
+  reviewsCount: number;
+  ratingCount: number;
 }
 
 export interface GameId {
@@ -65,7 +68,7 @@ export interface UserOwnedGameData {
   playtime?: number;
   lastPlayed?: number;
   rating?: number;
-  reviews?: string[];  
+  reviews?: string[];
 }
 
 export interface UserWishedGameData {
@@ -73,5 +76,5 @@ export interface UserWishedGameData {
   name: string;
   description: string;
   timeWishListed: number;
-  reviews: undefined
+  reviews: undefined;
 }
