@@ -1,8 +1,15 @@
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated]);
   console.log(
     user?.username,
     user?.isAdmin,
