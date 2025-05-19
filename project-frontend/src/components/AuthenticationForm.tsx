@@ -22,14 +22,11 @@ interface Props {
 }
 
 export const AuthenticationForm = ({ mode }: Props) => {
-  const { isAuthenticated, login } = useAuth();
+  const { login } = useAuth();
   const authMethod = mode === 'login' ? authLogin : authRegister;
 
   // Disable access to this page if already logged in
   let navigate = useNavigate();
-  if (isAuthenticated) {
-    navigate('/');
-  }
 
   const [formData, setFormData] = React.useState<Credentials>({
     email: '',
