@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { authVerify } from '../api/auth';
 
-interface User {
+export interface User {
   userId: string;
   username: string;
   profilePicture?: string;
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: Props) => {
         setIsAuthenticated(false);
         return;
       }
-      const { data, success } = response.payload;
+      const { data } = response.payload;
       switch (response.status) {
         case 200:
           setIsAuthenticated(true);
