@@ -11,13 +11,15 @@ import { BadRequestError } from '../../utils/errors';
 import { validateGame } from '../../utils/gameUtil';
 import { Game, InitialGame } from '../../utils/interface';
 
+
+// TODO: Add image url checks and/or allow imports
 export const adminAddGame = async (game: InitialGame) => {
   // TODO: Update this to be more lenient
   const releaseDate = game.releaseDate || new Date().toISOString();
   try {
     const existingGame = await findGameByNameAndReleaseDate(
       game.name,
-      releaseDate,
+      releaseDate as string,
       false
     );
     if (existingGame)

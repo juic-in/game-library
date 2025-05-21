@@ -16,10 +16,10 @@ export interface InitialGame {
   name: string;
   description: string;
   image: string;
-  releaseDate: string;
+  releaseDate: Date;
   priceCents: number;
-  developer: string;
-  publisher: string;
+  developers: string[];
+  publishers: string[];
   genres: string[];
   platforms: string[];
   tags: string[];
