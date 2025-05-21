@@ -58,6 +58,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
           justifyContent={'space-between'}
           flexDir={{ base: 'column', sm: 'row' }}
         >
+          {/* Sidebar Toggle */}
           <Box
             as="div"
             onClick={toggleSidebar}
@@ -92,6 +93,7 @@ export const Navbar = ({ toggleSidebar }: Props) => {
             <Link to={'/'}>GameXUnify</Link>
           </Text>
 
+          {/* Authentication Nav */}
           <Flex alignItems="center" justifyContent="center" mr={4} >
             {!isAuthenticated ? (
               <>
