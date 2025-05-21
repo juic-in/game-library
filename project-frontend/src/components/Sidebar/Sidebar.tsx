@@ -25,7 +25,7 @@ export const Sidebar = ({ isCollapsed }: Props) => {
       bg="gray.800"
       color="white"
       w={isCollapsed ? '60px' : '160px'}
-      minH="100vh"
+      h="100%"
       // transition="width 0.2s ease"
       position={'fixed'}
       left={0}
