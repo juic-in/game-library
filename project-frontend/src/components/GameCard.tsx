@@ -8,8 +8,8 @@ interface Props {
 }
 
 export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
-  const cardHeight = '500px';
-  const cardWidth = '280px';
+  const cardHeight = '550px';
+  const cardWidth = '320px';
 
   // Conditionally apply styles based on game ownership and user status
   let cardBg = 'white';
@@ -28,7 +28,7 @@ export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
   //
   return (
     <Box
-      p={5}
+      m={2}
       borderRadius="lg"
       boxShadow="sm"
       transition="all 0.2s"
@@ -46,20 +46,20 @@ export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
       opacity={opacity}
       cursor={cursor}
     >
-      <Box mt={2} textAlign="center">
+      <Box mt={4} textAlign="center">
         <Heading
-          fontSize={{ base: 'xl', md: '2xl' }}
-          mb={3}
+          fontSize={{ base: 'l', md: 'xl' }}
+          minHeight='55px'
           color={cardTextColor}
         >
           {title}
         </Heading>
-        <Text flex="1" mb={3} color={cardTextColor}>
-          {description}
-        </Text>
+      </Box>
+      <Box>
+        hi
       </Box>
       <Box mt={2} textAlign="center">
-        <Text fontSize="sm" color={cardTextColor}>
+        <Text fontSize="sm" color={cardTextColor} mb={3}>
           More Info
         </Text>
       </Box>
