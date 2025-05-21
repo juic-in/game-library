@@ -18,12 +18,14 @@ export const AdminPanel = () => {
       flexDir="column"
       p={5}
       className="admin-panel"
+      color='black'
     >
       <Flex className="admin-action-select" gap={1} mb={3}>
         <Button
           onClick={() => setAction(Actions.Add)}
           bg="gray.200"
           borderRadius="0px"
+          color='black'
         >
           Add Game
         </Button>
@@ -31,6 +33,7 @@ export const AdminPanel = () => {
           onClick={() => setAction(Actions.Update)}
           bg="gray.200"
           borderRadius="0px"
+          color='black'
         >
           Update Game
         </Button>
@@ -38,6 +41,7 @@ export const AdminPanel = () => {
           onClick={() => setAction(Actions.Delete)}
           bg="gray.200"
           borderRadius="0px"
+          color='black'
         >
           Delete Game
         </Button>
