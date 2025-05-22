@@ -1,4 +1,4 @@
-export enum Genre {
+export enum Genres {
   Action = 'Action',
   ActionAdventure = 'Action-Adventure',
   Adventure = 'Adventure',
@@ -55,16 +55,16 @@ export enum Genre {
 }
 
 export type AllTags =
-  | GameplayTag
-  | ThemeTag
-  | MechanicTag
-  | PerspectiveTag
-  | AestheticTag
-  | FeatureTag
-  | AudienceTag;
+  | GameplayTags
+  | ThemeTags
+  | MechanicTags
+  | PerspectiveTags
+  | AestheticTags
+  | FeatureTags
+  | AudienceTags;
 
 // Gameplay Style
-export enum GameplayTag {
+export enum GameplayTags {
   ControllerSupport = 'Controller Support',
   CoOp = 'Co-op',
   CrossPlatform = 'Cross-Platform',
@@ -79,7 +79,7 @@ export enum GameplayTag {
 }
 
 // Tone & Theme
-export enum ThemeTag {
+export enum ThemeTags {
   Anime = 'Anime',
   Atmospheric = 'Atmospheric',
   Cartoon = 'Cartoon',
@@ -99,7 +99,7 @@ export enum ThemeTag {
 }
 
 // Mechanics
-export enum MechanicTag {
+export enum MechanicTags {
   BaseBuilding = 'Base Building',
   Crafting = 'Crafting',
   Deckbuilding = 'Deckbuilding',
@@ -119,7 +119,7 @@ export enum MechanicTag {
 }
 
 // Perspective
-export enum PerspectiveTag {
+export enum PerspectiveTags {
   FirstPerson = 'First-Person',
   Isometric = 'Isometric',
   SideScroller = 'Side-Scroller',
@@ -131,7 +131,7 @@ export enum PerspectiveTag {
 }
 
 // Visual/Audio
-export enum AestheticTag {
+export enum AestheticTags {
   AmbientMusic = 'Ambient Music',
   Beautiful = 'Beautiful',
   Cinematic = 'Cinematic',
@@ -142,7 +142,7 @@ export enum AestheticTag {
 }
 
 // Special Features
-export enum FeatureTag {
+export enum FeatureTags {
   Achievements = 'Achievements',
   ChoicesMatter = 'Choices Matter',
   EarlyAccess = 'Early Access',
@@ -158,7 +158,7 @@ export enum FeatureTag {
 }
 
 // Audience
-export enum AudienceTag {
+export enum AudienceTags {
   AccessibilityFeatures = 'Accessibility Features',
   Casual = 'Casual',
   Competitive = 'Competitive',
@@ -168,14 +168,14 @@ export enum AudienceTag {
 }
 
 export type AllPlatforms =
-  | PCPlatform
-  | ConsolePlatform
-  | MobilePlatform
-  | LegacyPlatform
-  | CloudPlatform;
+  | PCPlatforms
+  | ConsolePlatforms
+  | MobilePlatforms
+  | LegacyPlatforms
+  | CloudPlatforms;
 
 // PC Platforms
-export enum PCPlatform {
+export enum PCPlatforms {
   Battlenet = 'Battle.net',
   EpicGamesStore = 'Epic Games Store',
   GOG = 'GOG',
@@ -190,7 +190,7 @@ export enum PCPlatform {
 }
 
 // Console Platforms
-export enum ConsolePlatform {
+export enum ConsolePlatforms {
   GameCube = 'GameCube',
   Nintendo64 = 'Nintendo 64',
   NintendoSwitch = 'Nintendo Switch',
@@ -207,7 +207,7 @@ export enum ConsolePlatform {
 }
 
 // Mobile Platforms
-export enum MobilePlatform {
+export enum MobilePlatforms {
   AmazonAppstore = 'Amazon Appstore',
   Android = 'Android',
   AppleArcade = 'Apple Arcade',
@@ -216,7 +216,7 @@ export enum MobilePlatform {
 }
 
 // Legacy Platforms
-export enum LegacyPlatform {
+export enum LegacyPlatforms {
   Atari2600 = 'Atari 2600',
   Dreamcast = 'Dreamcast',
   GameBoy = 'Game Boy',
@@ -229,7 +229,7 @@ export enum LegacyPlatform {
 }
 
 // Cloud Platforms
-export enum CloudPlatform {
+export enum CloudPlatforms {
   AmazonLuna = 'Amazon Luna',
   GeForceNow = 'GeForce NOW',
   GoogleStadia = 'Google Stadia (discontinued)',
