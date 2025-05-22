@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import { Genre, AllPlatforms, AllTags } from '../../enums';
+import { Genres, AllPlatforms, AllTags } from '../../enums';
 import { useState } from 'react';
 import { GenreSelector } from '../Selectors/GenreSelector';
 import { PlatformSelector } from '../Selectors/PlatformSelector';
@@ -14,7 +14,7 @@ export const AddGameForm = () => {
   const [priceCents, setPriceCents] = useState<number>(0);
   const [developers, setDevelopers] = useState<string[]>([]);
   const [publishers, setPublishers] = useState<string[]>([]);
-  const [genres, setGenres] = useState<Genre[]>([]);
+  const [genres, setGenres] = useState<Genres[]>([]);
   const [platforms, setPlatforms] = useState<AllPlatforms[]>([]);
   const [tags, setTags] = useState<AllTags[]>([]);
 
@@ -28,12 +28,68 @@ export const AddGameForm = () => {
         bgGradient="linear(to-l, gray.300, gray.700)"
       />
 
-      {/* Selectors */}
-      <GenreSelector setGenres={setGenres} />
-      <PlatformSelector setPlatforms={setPlatforms} />
-      <TagSelector setTags={setTags} />
+      {/* Selectors - Can't be bothered separated the text and yadaayaddeedooo into components */}
+      
+      {/* Genre Selector */}
+      <Flex gap={4} flexDir="row" justifyContent="space-between">
+        <Text
+          backgroundColor="white"
+          minWidth="90%"
+          minHeight="80px"
+          border="solid"
+          borderColor="black"
+          borderRadius={5}
+          borderWidth={1}
+          padding={3}
+        >
+          {`Selected Genres: ${genres.join(', ')}`}
+        </Text>
+        <GenreSelector genres={genres} setGenres={setGenres} />
+      </Flex>
 
-      <Button onClick={() => console.log('add')}>Add</Button>
+      {/* Platforms Selector */}
+      <Flex gap={4} flexDir="row" justifyContent="space-between">
+        <Text
+          backgroundColor="white"
+          minWidth="90%"
+          minHeight="80px"
+          border="solid"
+          borderColor="black"
+          borderRadius={5}
+          borderWidth={1}
+          padding={3}
+        >
+          {`Selected Platforms: ${platforms.join(', ')}`}
+        </Text>
+        <PlatformSelector platforms={platforms} setPlatforms={setPlatforms} />
+      </Flex>
+      
+      {/* Tags Selector */}
+      <Flex gap={4} flexDir="row" justifyContent="space-between">
+        <Text
+          backgroundColor="white"
+          minWidth="90%"
+          minHeight="80px"
+          border="solid"
+          borderColor="black"
+          borderRadius={5}
+          borderWidth={1}
+          padding={3}
+        >
+          {`Selected Tags: ${tags.join(', ')}`}
+        </Text>
+        <TagSelector tags={tags} setTags={setTags} />
+      </Flex>
+
+      <Button
+        onClick={() =>
+          console.log(
+            `Genres: ${genres}\nPlatforms: ${platforms}\nTags: ${tags}`
+          )
+        }
+      >
+        Add
+      </Button>
     </Flex>
   );
 };
