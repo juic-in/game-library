@@ -5,14 +5,14 @@ import { requireAdminAuth } from '../middleware/authMiddleware';
 const router = express.Router();
 router.use(requireAdminAuth)
 
-router.delete('db/clear', clear);
+router.delete('/db/clear', clear);
 
-router.get('db/users', getUsers)
+router.get('/db/users', getUsers)
 
-router.post('game/', createGame);
+router.post('/game', createGame);
 
-router.put('game/:gameId', updateGame);
+router.put('/game/:gameId', updateGame);
 
-router.delete('game/:gameId', deleteGame);
+router.delete('/game/:gameId', deleteGame);
 
 export default router;
