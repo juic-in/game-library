@@ -1,6 +1,15 @@
-import { SimpleGrid, Flex, Box, Input, HStack, Grid } from '@chakra-ui/react';
+import {
+  SimpleGrid,
+  Flex,
+  Box,
+  Input,
+  HStack,
+  Grid,
+  GridItem,
+  Button,
+} from '@chakra-ui/react';
 import { GameCard } from '../components/GameCard'; // Assuming the path is correct
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getGamesList } from '../api/game';
 import { useModal } from '../context/ModalProvider';
 
@@ -19,43 +28,52 @@ export const DiscoverPage = () => {
 
   const [searchQuery, setSearcyQuery] = useState<string>('');
   const [pageNumber, setPageNumber] = useState<number>(1);
-
   const { openErrorModal } = useModal();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getGamesList();
+  const fetchGames = async (searchQuery: string, page: number) => {
+    const response = await getGamesList();
 
-      if ('error' in response) {
-        openErrorModal(response.error);
-        return;
-      }
-      const { status } = response;
-      const { data } = response.payload;
-      switch (status) {
-        case 200:
-          const keysToKeep = ['_id', 'name', 'description'];
-          const filteredData: GameCardInfo[] = data.map(
-            (obj: Record<string, any>): GameCardInfo => {
-              const filtered: Partial<GameCardInfo> = {};
-              keysToKeep.forEach((key: string) => {
-                if (key in obj) {
-                  filtered[key as keyof GameCardInfo] =
-                    obj[key as keyof GameCardInfo];
-                }
-              });
-              return filtered as GameCardInfo;
-            }
-          );
-          setGames(filteredData);
-          break;
-        // handle other errors later
-      }
-    };
-    fetchData();
+    if ('error' in response) {
+      openErrorModal(response.error);
+      return;
+    }
+    const { status } = response;
+    const { data } = response.payload;
+    switch (status) {
+      case 200:
+        const keysToKeep = ['_id', 'name', 'description'];
+        const filteredData: GameCardInfo[] = data.map(
+          (obj: Record<string, any>): GameCardInfo => {
+            const filtered: Partial<GameCardInfo> = {};
+            keysToKeep.forEach((key: string) => {
+              if (key in obj) {
+                filtered[key as keyof GameCardInfo] =
+                  obj[key as keyof GameCardInfo];
+              }
+            });
+            return filtered as GameCardInfo;
+          }
+        );
+        setGames(
+          filteredData
+            .concat(filteredData)
+            .concat(filteredData)
+            .concat(filteredData)
+            .concat(filteredData)
+            .concat(filteredData)
+        );
+        break;
+      // handle other errors later
+    }
+  };
+  useEffect(() => {
+    fetchGames(searchQuery, pageNumber);
   }, []);
 
-  // TODO: FIX THE GRID LAYOUT, SHOULD BE DYNAMIC WITH A MIN SIZE
+  const handleSearch = () => {
+    fetchGames(searchQuery, pageNumber);
+  };
+
   return (
     <>
       <Flex
@@ -71,7 +89,12 @@ export const DiscoverPage = () => {
             className="search-box-input"
             name="search-item"
             borderRadius={1}
+            onChange={(e) => setSearcyQuery(e.target.value)}
+            onKeyDown={handleSearch}
           />
+          <Button onClick={handleSearch}>
+            Search
+          </Button>
         </HStack>
         <Grid
           templateColumns="repeat(auto-fill, minmax(320px, 1fr))"
@@ -79,27 +102,21 @@ export const DiscoverPage = () => {
           gap={3}
           w="100%"
         >
-          {games
-            .concat(games)
-            .concat(games)
-            .concat(games)
-            .concat(games)
-            .concat(games)
-            .map(
-              (
-                game,
-                index // testing
-              ) => (
-                // {games.map((game, index) => (
-                <GameCard
-                  key={index}
-                  title={game.name}
-                  description={game.description}
-                  owned={false} // Placeholder, replace with actual ownership logic
-                  loggedIn={false} // Placeholder, replace with actual login status
-                />
-              )
-            )}
+          {games.map(
+            (
+              game,
+              index // testing
+            ) => (
+              // {games.map((game, index) => (
+              <GameCard
+                key={index}
+                title={game.name}
+                description={game.description}
+                owned={false} // Placeholder, replace with actual ownership logic
+                loggedIn={false} // Placeholder, replace with actual login status
+              />
+            )
+          )}
         </Grid>
       </Flex>
     </>
