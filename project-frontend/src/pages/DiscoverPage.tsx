@@ -31,7 +31,7 @@ export const DiscoverPage = () => {
   const { openErrorModal } = useModal();
 
   const fetchGames = async (searchQuery: string, page: number) => {
-    const response = await getGamesList();
+    const response = await getGamesList(searchQuery, page);
 
     if ('error' in response) {
       openErrorModal(response.error);
@@ -92,9 +92,7 @@ export const DiscoverPage = () => {
             onChange={(e) => setSearcyQuery(e.target.value)}
             onKeyDown={handleSearch}
           />
-          <Button onClick={handleSearch}>
-            Search
-          </Button>
+          <Button onClick={handleSearch}>Search</Button>
         </HStack>
         <Grid
           templateColumns="repeat(auto-fill, minmax(320px, 1fr))"

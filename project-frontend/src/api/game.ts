@@ -7,11 +7,11 @@ export const addToGamesLib = async (gameData: InitialGame) => {
     const response = await axios.post('admin/game', gameData);
     return handleResponse(response);
   } catch (error) {
-    return { error: (error as any).message as string}
+    return { error: (error as any).message as string };
   }
-}
+};
 
-export const getGamesList = async () => {
+export const getGamesList = async (searchQuery: string, page: number) => {
   try {
     const response = await axios.get('public/game/lib');
     return handleResponse(response);
