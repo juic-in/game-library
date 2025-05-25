@@ -11,9 +11,27 @@ export const addToGamesLib = async (gameData: InitialGame) => {
   }
 };
 
+export const removeFromGamesLib = async (gameId: string) => {
+  try {
+    const response = await axios.delete(`admin/game/${gameId}`);
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
+  }
+};
+
 export const getGamesList = async (searchQuery: string, page: number) => {
   try {
     const response = await axios.get('public/game/lib');
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
+  }
+};
+
+export const getGameIdentifiers = async () => {
+  try {
+    const response = await axios.get('public/game/identifiers');
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };
