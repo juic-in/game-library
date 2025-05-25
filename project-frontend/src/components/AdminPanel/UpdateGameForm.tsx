@@ -11,6 +11,8 @@ export const UpdateGameForm = () => {
    * to set initial values
    **/
 
+  // when adding in game selector, limit the selected games to the first one in the array
+
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [image, setImage] = useState<string>('');
