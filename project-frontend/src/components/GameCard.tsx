@@ -1,16 +1,16 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react';
 
 interface Props {
   title: string;
-  description: string;
+  image: string;
   owned: boolean; // Whether the game is owned or not
   loggedIn: boolean; // Whether the user is logged in
 }
 
-export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
+export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
   const cardHeight = '550px';
-  const cardWidth = '320px';
-
+  const cardWidth = '315px';
+  console.log(title, image);
   // Conditionally apply styles based on game ownership and user status
   let cardBg = 'white';
   let cardTextColor = 'gray.500';
@@ -27,7 +27,7 @@ export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
   }
   //
   return (
-    <Box
+    <Flex
       m={2}
       borderRadius="lg"
       boxShadow="sm"
@@ -49,20 +49,30 @@ export const GameCard = ({ title, description, owned, loggedIn }: Props) => {
       <Box mt={4} textAlign="center">
         <Heading
           fontSize={{ base: 'l', md: 'xl' }}
-          minHeight='55px'
+          minHeight="55px"
           color={cardTextColor}
         >
           {title}
         </Heading>
       </Box>
-      <Box>
-        hi
+      <Box
+        height="2px"
+        width="100%"
+        bgGradient="linear(to-r, cyan.400, blue.500)"
+      />
+      <Box overflow="hidden">
+        <Image src={image} objectFit="cover" w="100%" h="100%" />
       </Box>
-      <Box mt={2} textAlign="center">
-        <Text fontSize="sm" color={cardTextColor} mb={3}>
+      <Box
+        height="2px"
+        width="100%"
+        bgGradient="linear(to-r, cyan.400, blue.500)"
+      />
+      <Box my={1} textAlign="center">
+        <Text fontSize="sm" color={cardTextColor}>
           More Info
         </Text>
       </Box>
-    </Box>
+    </Flex>
   );
 };
