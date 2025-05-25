@@ -7,10 +7,9 @@ import {
   updateGame,
 } from '../../data/db/dbGame';
 import { clearUsers } from '../../data/db/dbUser';
-import { BadRequestError } from '../../utils/errors';
+import { BadRequestError, InternalServerError } from '../../utils/errors';
 import { validateGame } from '../../utils/gameUtil';
 import { Game, InitialGame } from '../../utils/interface';
-
 
 // TODO: Add image url checks and/or allow imports
 export const adminAddGame = async (game: InitialGame) => {

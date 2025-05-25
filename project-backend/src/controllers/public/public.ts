@@ -4,7 +4,7 @@ import { UserProfile } from '../../data/models/User';
 import { BadRequestError, InternalServerError, UnauthorizedError } from '../../utils/errors';
 
 export const gamesList = async () => {
-  const result = getAllGames();
+  const result = await getAllGames();
   if (!result) {
     throw new InternalServerError('Could not find the Games collection');
   }
@@ -81,4 +81,12 @@ export const userGetFriends = async (userId: string) => {
   if (isPublic) {
     return items
   } else throw new UnauthorizedError('This user\'s friends list is private')
+}
+
+export async function getGameRefs() {
+  const result = await getAllGames();
+  if (!result) {
+    throw new InternalServerError('Could not find the Games collection');
+  }
+  return result.map((game) => ({ gameId: game._id, name: game.name }));
 }
