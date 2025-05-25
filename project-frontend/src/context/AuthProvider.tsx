@@ -36,6 +36,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+// TODO: Add loading, to delay the execution of some auth guards
 export const AuthProvider = ({ children }: Props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // General non-sensitive user data
