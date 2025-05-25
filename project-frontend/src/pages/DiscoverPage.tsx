@@ -17,6 +17,7 @@ interface GameCardInfo {
   _id: string;
   name: string;
   description: string;
+  image: string
 }
 
 // TODO: Set up pagination, add limits to  backend, also introduce limits to backend
@@ -41,7 +42,7 @@ export const DiscoverPage = () => {
     const { data } = response.payload;
     switch (status) {
       case 200:
-        const keysToKeep = ['_id', 'name', 'description'];
+        const keysToKeep = ['_id', 'name', 'description', 'image'];
         const filteredData: GameCardInfo[] = data.map(
           (obj: Record<string, any>): GameCardInfo => {
             const filtered: Partial<GameCardInfo> = {};
@@ -109,7 +110,7 @@ export const DiscoverPage = () => {
               <GameCard
                 key={index}
                 title={game.name}
-                description={game.description}
+                image={game.image}
                 owned={false} // Placeholder, replace with actual ownership logic
                 loggedIn={false} // Placeholder, replace with actual login status
               />
