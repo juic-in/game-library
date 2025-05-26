@@ -10,7 +10,9 @@ import {
 
 export const getGamesList = async (req: Request, res: Response) => {
   try {
-    const result = await gamesList();
+    const searchQuery = req.query.search as string  || '';
+    const page = parseInt(req.query.page as string) || 1;
+    const result = await gamesList({searchQuery, page});
     return res.status(200).json({ success: true, data: result });
   } catch (error) {
     res

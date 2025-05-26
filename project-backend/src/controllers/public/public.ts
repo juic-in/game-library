@@ -1,10 +1,19 @@
 import { findGameById, getAllGames } from '../../data/db/dbGame';
 import { findUserById } from '../../data/db/dbUser';
 import { UserProfile } from '../../data/models/User';
-import { BadRequestError, InternalServerError, UnauthorizedError } from '../../utils/errors';
+import {
+  BadRequestError,
+  InternalServerError,
+  UnauthorizedError,
+} from '../../utils/errors';
 
-export const gamesList = async () => {
-  const result = await getAllGames();
+export const gamesList = async (
+  filterObj: {
+    searchQuery?: string;
+    page?: number;
+  } = {}
+) => {
+  const result = await getAllGames(filterObj);
   if (!result) {
     throw new InternalServerError('Could not find the Games collection');
   }
@@ -21,17 +30,18 @@ export const gameInfo = async (gameId: string) => {
 
 // Break up later on
 export const userGames = async (userId: string) => {
-  const user = await findUserById(userId);  
+  const user = await findUserById(userId);
   if (!user) {
     throw new BadRequestError(`There is no such user with a id of ${userId}`);
   }
 
-  const { ownedGames } = user
-  if (!ownedGames.public) throw new UnauthorizedError('This user\'s games are private');
+  const { ownedGames } = user;
+  if (!ownedGames.public)
+    throw new UnauthorizedError("This user's games are private");
   else {
-    return ownedGames.items 
+    return ownedGames.items;
   }
-}
+};
 
 export const userInfo = async (userId: string) => {
   const user = await findUserById(userId);
@@ -62,26 +72,25 @@ export const userInfo = async (userId: string) => {
 export const userGetWishlist = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new UnauthorizedError('Invalid User')
+    throw new UnauthorizedError('Invalid User');
   }
 
-  const { public: isPublic, items} = user.wishlist
+  const { public: isPublic, items } = user.wishlist;
   if (isPublic) {
-    return items
-  } else throw new UnauthorizedError('This user\'s wishlist is private')
-
-}
+    return items;
+  } else throw new UnauthorizedError("This user's wishlist is private");
+};
 export const userGetFriends = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new UnauthorizedError('Invalid User')
+    throw new UnauthorizedError('Invalid User');
   }
 
-  const { public: isPublic, items} = user.wishlist
+  const { public: isPublic, items } = user.wishlist;
   if (isPublic) {
-    return items
-  } else throw new UnauthorizedError('This user\'s friends list is private')
-}
+    return items;
+  } else throw new UnauthorizedError("This user's friends list is private");
+};
 
 export async function getGameRefs() {
   const result = await getAllGames();

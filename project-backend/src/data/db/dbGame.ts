@@ -52,10 +52,25 @@ export const findGameByNameAndReleaseDate = async (
   return game;
 };
 
-export const getAllGames = async () => {
-  return await Game.find({});
+export const getAllGames = async (
+  filterObj: {
+    searchQuery?: string;
+    page?: number;
+  } = {}
+) => {
+  const { searchQuery = '', page = 1 } = filterObj;
+
+  const query: any = {};
+
+  if (searchQuery) {
+    query.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+  }
+  const pageSize = 50
+  const skip = (page - 1) * pageSize; // Assuming 10 games per page
+  
+  return await Game.find(query).skip(skip).limit(pageSize)
 };
 
 export const clearGames = async () => {
-  await Game.deleteMany({})
-}
+  await Game.deleteMany({});
+};
