@@ -22,7 +22,7 @@ export const removeFromGamesLib = async (gameId: string) => {
 
 export const getGamesList = async (searchQuery: string, page: number) => {
   try {
-    const response = await axios.get('public/game/lib');
+    const response = await axios.get(`public/game/lib?search=${searchQuery}&page=${page}`);
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };

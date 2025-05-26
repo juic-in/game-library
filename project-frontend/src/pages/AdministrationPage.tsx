@@ -18,7 +18,7 @@ export const AdministrationPage = () => {
     if (!isAuthenticated || (user && !user.isAdmin) || flag) {
       navigate('/');
     }
-  }, [isAuthenticated, flag, user?.isAdmin]);
+  }, []);
 
   // Primary admin check - a better security check as it directly communicates with the backend
   useEffect(() => {

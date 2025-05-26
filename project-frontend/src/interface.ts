@@ -10,3 +10,8 @@ export interface InitialGame {
   platforms: string[];
   tags: string[];
 }
+
+export interface GameRef {
+  gameId: string;
+  name: string;
+}

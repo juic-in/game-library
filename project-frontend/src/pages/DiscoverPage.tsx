@@ -69,7 +69,7 @@ export const DiscoverPage = () => {
   };
   useEffect(() => {
     fetchGames(searchQuery, pageNumber);
-  }, []);
+  }, [pageNumber]);
 
   const handleSearch = () => {
     fetchGames(searchQuery, pageNumber);
