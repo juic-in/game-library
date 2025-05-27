@@ -14,11 +14,11 @@ export const AdministrationPage = () => {
   const { openErrorModal } = useModal();
 
   // initial admin check
-  useEffect(() => {
-    if (!isAuthenticated || (user && !user.isAdmin) || flag) {
-      navigate('/');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isAuthenticated || (user && !user.isAdmin) || flag) {
+  //     navigate('/');
+  //   }
+  // }, []);
 
   // Primary admin check - a better security check as it directly communicates with the backend
   useEffect(() => {
