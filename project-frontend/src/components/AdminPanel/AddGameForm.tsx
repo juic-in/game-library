@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { GenreSelector } from '../Selectors/GenreSelector';
 import { PlatformSelector } from '../Selectors/PlatformSelector';
 import { TagSelector } from '../Selectors/TagSelector';
-import { desc } from 'framer-motion/client';
 import { InitialGame } from '../../interface';
 import { addToGamesLib } from '../../api/game';
 import { useModal } from '../../context/ModalProvider';
@@ -123,7 +122,7 @@ export const AddGameForm = () => {
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setDevelopers(e.target.value.split(','))}
+        onChange={(e) => setDevelopers(e.target.value.split(', '))}
       ></Input>
       <Input
         placeholder="Publishers - comma separated"
@@ -131,7 +130,7 @@ export const AddGameForm = () => {
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setPublishers(e.target.value.split(','))}
+        onChange={(e) => setPublishers(e.target.value.split(', '))}
       ></Input>
 
       {/* Selectors - Can't be bothered separated the text and yadaayaddeedooo into components */}
