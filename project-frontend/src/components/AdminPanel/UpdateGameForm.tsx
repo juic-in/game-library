@@ -4,9 +4,13 @@ import { Genres, AllPlatforms, AllTags } from '../../enums';
 import { GenreSelector } from '../Selectors/GenreSelector';
 import { PlatformSelector } from '../Selectors/PlatformSelector';
 import { TagSelector } from '../Selectors/TagSelector';
-import { GameRef } from '../../interface';
+import { Game, GameRef } from '../../interface';
 import { useModal } from '../../context/ModalProvider';
-import { getGameData, getGameIdentifiers } from '../../api/game';
+import {
+  getGameData,
+  getGameIdentifiers,
+  updateGameFromLib,
+} from '../../api/game';
 import { GameSelector } from '../Selectors/GameSelector';
 
 export const UpdateGameForm = () => {
@@ -16,6 +20,7 @@ export const UpdateGameForm = () => {
    **/
 
   // when adding in game selector, limit the selected games to the first one in the array
+  const [gameData, setGameData] = useState<Game | null>(null);
   const [games, setGames] = useState<GameRef[]>([]);
   const [selectedGames, setSelectedGames] = useState<GameRef[]>([]);
 
@@ -75,7 +80,8 @@ export const UpdateGameForm = () => {
           openErrorModal('Game data not found.');
           return;
         }
-        console.log(gameData.name);
+        // Make this cleaner
+        setGameData(gameData);
         setName(gameData.name || '');
         setDescription(gameData.description || '');
         setImage(gameData.image || '');
@@ -94,6 +100,46 @@ export const UpdateGameForm = () => {
     };
     fetchData();
   }, [selectedGames]);
+
+  const handleUpdate = async () => {
+    if (!gameData) return;
+    try {
+      const updatedGameData = {
+        ...gameData,
+        name,
+        description,
+        image,
+        releaseDate,
+        priceCents,
+        developers,
+        publishers,
+        genres,
+        platforms,
+        tags,
+      };
+      console.log('Updated Game Data:', updatedGameData);
+      const response = await updateGameFromLib(
+        gameData._id,
+        updatedGameData
+      );
+      if ('error' in response) {
+        openErrorModal(response.error);
+        return;
+      }
+
+      const { status, payload } = response;
+      if (status === 200) {
+        window.location.reload();
+        return;
+      } else {
+        const { error } = payload;
+        openErrorModal(error || 'An unknown error occurred while updating the game.');
+      }
+    } catch (error) {
+      console.error('Error during authentication:', error);
+      openErrorModal('An error occurred during authentication.');
+    }
+  };
 
   return (
     <Flex bg="gray.300" flexDir="column" p={4} gap={4}>
@@ -227,15 +273,7 @@ export const UpdateGameForm = () => {
         <TagSelector tags={tags} setTags={setTags} />
       </Flex>
 
-      <Button
-        onClick={() =>
-          console.log(
-            `Genres: ${genres}\nPlatforms: ${platforms}\nTags: ${tags}`
-          )
-        }
-      >
-        Update
-      </Button>
+      <Button onClick={handleUpdate}>Update</Button>
     </Flex>
   );
 };

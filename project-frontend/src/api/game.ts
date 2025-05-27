@@ -1,4 +1,4 @@
-import { InitialGame } from '../interface';
+import { Game, InitialGame } from '../interface';
 import axios from './axios';
 import { handleResponse } from './util';
 
@@ -32,6 +32,15 @@ export const getGamesList = async (searchQuery: string, page: number) => {
 export const getGameData = async (gameId: string) => {
   try {
     const response = await axios.get(`public/game/${gameId}`);
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
+  }
+}
+
+export const updateGameFromLib = async (gameId: string, gameData: Game) => {
+  try {
+    const response = await axios.put(`admin/game/${gameId}`, gameData);
     return handleResponse(response);
   } catch (error) {
     return { error: (error as any).message as string };

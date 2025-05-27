@@ -15,3 +15,12 @@ export interface GameRef {
   gameId: string;
   name: string;
 }
+
+export interface Game extends InitialGame {
+  _id: string;
+  gameId: string;
+  rating: number;
+  reviews: string[];
+  reviewsCount: number;
+  ratingCount: number;
+}
