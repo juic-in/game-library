@@ -18,12 +18,14 @@ interface Props {
   games: GameRef[];
   selectedGames: GameRef[];
   setSelectedGames: Dispatch<SetStateAction<GameRef[]>>;
+  isMultiSelect?: boolean;
 }
 
 export const GameSelector = ({
   games,
   selectedGames,
   setSelectedGames,
+  isMultiSelect = true,
 }: Props) => {
   const [search, setSearch] = useState('');
   const filtered = useMemo(
@@ -58,8 +60,8 @@ export const GameSelector = ({
           />
 
           <MenuOptionGroup
-            type="checkbox"
-            value={selectedGames.map((g) => g.gameId)}
+            type={isMultiSelect ? "checkbox" : "radio"}
+            value={isMultiSelect ? selectedGames.map((g) => g.gameId) : selectedGames[0]?.gameId || ''}
             onChange={(selectedIds) => {
               const selectedGameObjects = games.filter((g) =>
                 selectedIds.includes(g.gameId)
