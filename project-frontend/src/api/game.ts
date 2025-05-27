@@ -29,6 +29,15 @@ export const getGamesList = async (searchQuery: string, page: number) => {
   }
 };
 
+export const getGameData = async (gameId: string) => {
+  try {
+    const response = await axios.get(`public/game/${gameId}`);
+    return handleResponse(response);
+  } catch (error) {
+    return { error: (error as any).message as string };
+  }
+}
+
 export const getGameIdentifiers = async () => {
   try {
     const response = await axios.get('public/game/identifiers');
