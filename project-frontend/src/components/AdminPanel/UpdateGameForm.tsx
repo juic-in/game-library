@@ -1,9 +1,13 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Genres, AllPlatforms, AllTags } from '../../enums';
 import { GenreSelector } from '../Selectors/GenreSelector';
 import { PlatformSelector } from '../Selectors/PlatformSelector';
 import { TagSelector } from '../Selectors/TagSelector';
+import { GameRef } from '../../interface';
+import { useModal } from '../../context/ModalProvider';
+import { getGameData, getGameIdentifiers } from '../../api/game';
+import { GameSelector } from '../Selectors/GameSelector';
 
 export const UpdateGameForm = () => {
   /**
@@ -12,6 +16,8 @@ export const UpdateGameForm = () => {
    **/
 
   // when adding in game selector, limit the selected games to the first one in the array
+  const [games, setGames] = useState<GameRef[]>([]);
+  const [selectedGames, setSelectedGames] = useState<GameRef[]>([]);
 
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -23,6 +29,71 @@ export const UpdateGameForm = () => {
   const [genres, setGenres] = useState<Genres[]>([]);
   const [platforms, setPlatforms] = useState<AllPlatforms[]>([]);
   const [tags, setTags] = useState<AllTags[]>([]);
+  const { openErrorModal } = useModal();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getGameIdentifiers();
+        if ('error' in response) {
+          openErrorModal(response.error);
+          return;
+        }
+        const { status } = response;
+        const { data } = response.payload;
+
+        switch (status) {
+          case 200:
+            setGames(data);
+            break;
+          // handle other errors later
+        }
+      } catch (error) {
+        openErrorModal('An error occurred during a request.');
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (selectedGames.length <= 0) return;
+    const fetchData = async () => {
+      try {
+        const response = await getGameData(selectedGames[0].gameId);
+        if ('error' in response) {
+          openErrorModal(response.error);
+          return;
+        }
+
+        const { success, data: gameData } = response.payload;
+
+        // Only need to check success, as this route doesnt have complex errors
+        if (!success) {
+          openErrorModal('Failed to load game data. Please try again.');
+          return;
+        } else if (!gameData) {
+          openErrorModal('Game data not found.');
+          return;
+        }
+        console.log(gameData.name);
+        setName(gameData.name || '');
+        setDescription(gameData.description || '');
+        setImage(gameData.image || '');
+        setReleaseDate(
+          gameData.releaseDate ? new Date(gameData.releaseDate) : new Date()
+        );
+        setPriceCents(gameData.priceCents || 0);
+        setDevelopers(gameData.developers || []);
+        setPublishers(gameData.publishers || []);
+        setGenres(gameData.genres || []);
+        setPlatforms(gameData.platforms || []);
+        setTags(gameData.tags || []);
+      } catch (error) {
+        openErrorModal('Failed to load game data. Please try again.');
+      }
+    };
+    fetchData();
+  }, [selectedGames]);
 
   return (
     <Flex bg="gray.300" flexDir="column" p={4} gap={4}>
@@ -32,6 +103,76 @@ export const UpdateGameForm = () => {
         width="95%"
         bgGradient="linear(to-l, gray.300, gray.700)"
       />
+
+      {/* Game Selector - TODO: Add a selector to choose the game to update */}
+      <GameSelector
+        games={games}
+        selectedGames={selectedGames}
+        setSelectedGames={setSelectedGames}
+        isMultiSelect={false}
+      />
+      {/* Ugly format too tired to refactor these*/}
+      <Input
+        placeholder="Name"
+        value={name}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setName(e.target.value)}
+      ></Input>
+      {/* TODO: Use soemthing other than input to handle text wrapping */}
+      <Input
+        placeholder="Description"
+        value={description}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setDescription(e.target.value)}
+      ></Input>
+      <Input
+        placeholder="Image"
+        value={image}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setImage(e.target.value)}
+      ></Input>
+      <Input
+        placeholder="Release date"
+        value={releaseDate.toISOString().split('T')[0]} // Format to YYYY-MM-DD
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) =>
+          setReleaseDate(
+            e.target.value ? new Date(e.target.value) : new Date(Date.now())
+          )
+        }
+      ></Input>
+      <Input
+        placeholder="Price in cents"
+        value={priceCents.toString()}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setPriceCents(Number(e.target.value))}
+      ></Input>
+      <Input
+        placeholder="Developers - comma separated"
+        value={developers.join(', ')}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setDevelopers(e.target.value.split(','))}
+      ></Input>
+      <Input
+        placeholder="Publishers - comma separated"
+        value={publishers.join(', ')}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) => setPublishers(e.target.value.split(','))}
+      ></Input>
 
       {/* Selectors - Can't be bothered separated the text and yadaayaddeedooo into components */}
 
@@ -68,7 +209,7 @@ export const UpdateGameForm = () => {
         </Text>
         <PlatformSelector platforms={platforms} setPlatforms={setPlatforms} />
       </Flex>
-      
+
       {/* Tags Selector */}
       <Flex gap={4} flexDir="row" justifyContent="space-between">
         <Text
@@ -93,7 +234,7 @@ export const UpdateGameForm = () => {
           )
         }
       >
-        Add
+        Update
       </Button>
     </Flex>
   );
