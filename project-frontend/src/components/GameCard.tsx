@@ -41,7 +41,6 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
       width={cardWidth}
       display="flex"
       flexDirection="column"
-      justifyContent="space-between"
       maxW="sm"
       opacity={opacity}
       cursor={cursor}
@@ -60,7 +59,7 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
         width="100%"
         bgGradient="linear(to-r, cyan.400, blue.500)"
       />
-      <Box overflow="hidden">
+      <Box flex='1' overflow="hidden">
         <Image src={image} objectFit="cover" w="100%" h="100%" />
       </Box>
       <Box
@@ -68,7 +67,7 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
         width="100%"
         bgGradient="linear(to-r, cyan.400, blue.500)"
       />
-      <Box my={1} textAlign="center">
+      <Box mt='auto' my={1} textAlign="center" >
         <Text fontSize="sm" color={cardTextColor}>
           More Info
         </Text>
