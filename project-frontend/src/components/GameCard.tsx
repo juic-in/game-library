@@ -1,16 +1,17 @@
 import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
-  title: string;
+  name: string;
   image: string;
+  gameId: string;
   owned: boolean; // Whether the game is owned or not
   loggedIn: boolean; // Whether the user is logged in
 }
 
-export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
+export const GameCard = ({ name, image, gameId, owned, loggedIn }: Props) => {
   const cardHeight = '550px';
   const cardWidth = '315px';
-  console.log(title, image);
   // Conditionally apply styles based on game ownership and user status
   let cardBg = 'white';
   let cardTextColor = 'gray.500';
@@ -26,6 +27,8 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
     cursor = 'not-allowed';
   }
   //
+
+  const navigate = useNavigate()
   return (
     <Flex
       m={2}
@@ -44,6 +47,7 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
       maxW="sm"
       opacity={opacity}
       cursor={cursor}
+      onClick={() => navigate(`/discover/game?ref=${gameId}`)}
     >
       <Box mt={4} textAlign="center">
         <Heading
@@ -51,7 +55,7 @@ export const GameCard = ({ title, image, owned, loggedIn }: Props) => {
           minHeight="55px"
           color={cardTextColor}
         >
-          {title}
+          {name}
         </Heading>
       </Box>
       <Box

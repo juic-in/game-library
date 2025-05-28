@@ -17,7 +17,10 @@ interface GameCardInfo {
   _id: string;
   name: string;
   description: string;
-  image: string
+  images: {
+    cardImage: string,
+    
+  }
 }
 
 // TODO: Set up pagination, add limits to  backend, also introduce limits to backend
@@ -40,9 +43,10 @@ export const DiscoverPage = () => {
     }
     const { status } = response;
     const { data } = response.payload;
+    console.log(data)
     switch (status) {
       case 200:
-        const keysToKeep = ['_id', 'name', 'description', 'image'];
+        const keysToKeep = ['_id', 'name', 'description', 'images'];
         const filteredData: GameCardInfo[] = data.map(
           (obj: Record<string, any>): GameCardInfo => {
             const filtered: Partial<GameCardInfo> = {};
@@ -63,11 +67,13 @@ export const DiscoverPage = () => {
             .concat(filteredData)
             .concat(filteredData)
         );
+        console.log(filteredData)
         break;
       // handle other errors later
     }
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchGames(searchQuery, pageNumber);
   }, [pageNumber]);
 
@@ -109,8 +115,9 @@ export const DiscoverPage = () => {
               // {games.map((game, index) => (
               <GameCard
                 key={index}
-                title={game.name}
-                image={game.image}
+                name={game.name}
+                gameId={game._id}
+                image={game.images.cardImage}
                 owned={false} // Placeholder, replace with actual ownership logic
                 loggedIn={false} // Placeholder, replace with actual login status
               />

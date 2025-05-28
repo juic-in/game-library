@@ -6,14 +6,13 @@ const Dashboard = () => {
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (!isAuthenticated) {
       navigate('/');
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
 
   return <div>Dashboard</div>;
 };

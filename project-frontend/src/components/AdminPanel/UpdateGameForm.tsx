@@ -13,6 +13,11 @@ import {
 } from '../../api/game';
 import { GameSelector } from '../Selectors/GameSelector';
 
+interface Images {
+  cardImage: string;
+  contentImage: string;
+}
+
 export const UpdateGameForm = () => {
   /**
    * TODO: Take a game name / id or have a selector, with every game as an option
@@ -26,7 +31,10 @@ export const UpdateGameForm = () => {
 
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [image, setImage] = useState<string>('');
+  const [images, setImages] = useState<Images>({
+    cardImage: '',
+    contentImage: '',
+  });
   const [releaseDate, setReleaseDate] = useState<Date>(new Date());
   const [priceCents, setPriceCents] = useState<number>(0);
   const [developers, setDevelopers] = useState<string[]>([]);
@@ -71,7 +79,7 @@ export const UpdateGameForm = () => {
         }
 
         const { success, data: gameData } = response.payload;
-
+        console.log(gameData);
         // Only need to check success, as this route doesnt have complex errors
         if (!success) {
           openErrorModal('Failed to load game data. Please try again.');
@@ -84,7 +92,7 @@ export const UpdateGameForm = () => {
         setGameData(gameData);
         setName(gameData.name || '');
         setDescription(gameData.description || '');
-        setImage(gameData.image || '');
+        setImages(gameData.images);
         setReleaseDate(
           gameData.releaseDate ? new Date(gameData.releaseDate) : new Date()
         );
@@ -108,7 +116,7 @@ export const UpdateGameForm = () => {
         ...gameData,
         name,
         description,
-        image,
+        images,
         releaseDate,
         priceCents,
         developers,
@@ -118,10 +126,7 @@ export const UpdateGameForm = () => {
         tags,
       };
       console.log('Updated Game Data:', updatedGameData);
-      const response = await updateGameFromLib(
-        gameData._id,
-        updatedGameData
-      );
+      const response = await updateGameFromLib(gameData._id, updatedGameData);
       if ('error' in response) {
         openErrorModal(response.error);
         return;
@@ -133,7 +138,9 @@ export const UpdateGameForm = () => {
         return;
       } else {
         const { error } = payload;
-        openErrorModal(error || 'An unknown error occurred while updating the game.');
+        openErrorModal(
+          error || 'An unknown error occurred while updating the game.'
+        );
       }
     } catch (error) {
       console.error('Error during authentication:', error);
@@ -165,7 +172,7 @@ export const UpdateGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setName(e.target.value)}
-      ></Input>
+      />
       {/* TODO: Use soemthing other than input to handle text wrapping */}
       <Input
         placeholder="Description"
@@ -174,18 +181,36 @@ export const UpdateGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setDescription(e.target.value)}
-      ></Input>
+      />
       <Input
-        placeholder="Image"
-        value={image}
+        placeholder="Card Image"
+        value={images.cardImage}
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setImage(e.target.value)}
-      ></Input>
+        onChange={(e) =>
+          setImages((prev) => ({
+            ...prev,
+            cardImage: e.target.value,
+          }))
+        }
+      />
+      <Input
+        placeholder="Content Image"
+        value={images.contentImage}
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) =>
+          setImages((prev) => ({
+            ...prev,
+            contentImage: e.target.value,
+          }))
+        }
+      />
       <Input
         placeholder="Release date"
-        value={releaseDate.toISOString().split('T')[0]} // Format to YYYY-MM-DD
+        value={releaseDate.toISOString().split('T')[0]}
         bg="white"
         borderColor="black"
         borderRadius={1}
@@ -194,7 +219,7 @@ export const UpdateGameForm = () => {
             e.target.value ? new Date(e.target.value) : new Date(Date.now())
           )
         }
-      ></Input>
+      />
       <Input
         placeholder="Price in cents"
         value={priceCents.toString()}
@@ -202,23 +227,23 @@ export const UpdateGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setPriceCents(Number(e.target.value))}
-      ></Input>
+      />
       <Input
         placeholder="Developers - comma separated"
         value={developers.join(', ')}
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setDevelopers(e.target.value.split(','))}
-      ></Input>
+        onChange={(e) => setDevelopers(e.target.value.split(', '))}
+      />
       <Input
         placeholder="Publishers - comma separated"
         value={publishers.join(', ')}
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setPublishers(e.target.value.split(','))}
-      ></Input>
+        onChange={(e) => setPublishers(e.target.value.split(', '))}
+      />
 
       {/* Selectors - Can't be bothered separated the text and yadaayaddeedooo into components */}
 

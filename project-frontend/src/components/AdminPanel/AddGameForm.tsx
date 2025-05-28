@@ -8,11 +8,19 @@ import { InitialGame } from '../../interface';
 import { addToGamesLib } from '../../api/game';
 import { useModal } from '../../context/ModalProvider';
 
+interface Images {
+  cardImage: string;
+  contentImage: string;
+}
+
 export const AddGameForm = () => {
   // Could reduce with useReducer perchance.
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [image, setImage] = useState<string>('');
+  const [images, setImages] = useState<Images>({
+    cardImage: '',
+    contentImage: '',
+  });
   const [releaseDate, setReleaseDate] = useState<Date>(new Date());
   const [priceCents, setPriceCents] = useState<number>(0);
   const [developers, setDevelopers] = useState<string[]>([]);
@@ -22,7 +30,7 @@ export const AddGameForm = () => {
   const [tags, setTags] = useState<AllTags[]>([]);
 
   // TODO: Handle  errors later, not too  important right now
-  const [ errors, setErrors ] = useState<string>('')
+  const [errors, setErrors] = useState<string>('');
   const { openErrorModal } = useModal();
 
   const handleAdd = async () => {
@@ -30,7 +38,7 @@ export const AddGameForm = () => {
       const gameData: InitialGame = {
         name,
         description,
-        image,
+        images,
         releaseDate,
         priceCents,
         developers,
@@ -47,12 +55,12 @@ export const AddGameForm = () => {
 
       const { status, payload } = response;
       if (status === 200) {
-        window.location.reload()
+        window.location.reload();
         return;
       } else {
-        const { error } = payload
-        setErrors(error)
-        console.log(error)
+        const { error } = payload;
+        setErrors(error);
+        console.log(error);
       }
     } catch (error) {
       console.error('Error during authentication:', error);
@@ -78,7 +86,7 @@ export const AddGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setName(e.target.value)}
-      ></Input>
+      />
       {/* TODO: Use soemthing other than input to handle text wrapping */}
       <Input
         placeholder="Description"
@@ -87,15 +95,33 @@ export const AddGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setDescription(e.target.value)}
-      ></Input>
+      />
       <Input
-        placeholder="Image"
+        placeholder="Card Image"
         defaultValue=""
         bg="white"
         borderColor="black"
         borderRadius={1}
-        onChange={(e) => setImage(e.target.value)}
-      ></Input>
+        onChange={(e) =>
+          setImages((prev) => ({
+            ...prev,
+            cardImage: e.target.value,
+          }))
+        }
+      />
+      <Input
+        placeholder="Content Image"
+        defaultValue=""
+        bg="white"
+        borderColor="black"
+        borderRadius={1}
+        onChange={(e) =>
+          setImages((prev) => ({
+            ...prev,
+            contentImage: e.target.value,
+          }))
+        }
+      />
       <Input
         placeholder="Release date"
         defaultValue=""
@@ -107,7 +133,7 @@ export const AddGameForm = () => {
             e.target.value ? new Date(e.target.value) : new Date(Date.now())
           )
         }
-      ></Input>
+      />
       <Input
         placeholder="Price in cents"
         defaultValue=""
@@ -115,7 +141,7 @@ export const AddGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setPriceCents(Number(e.target.value))}
-      ></Input>
+      />
       <Input
         placeholder="Developers - comma separated"
         defaultValue=""
@@ -123,7 +149,7 @@ export const AddGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setDevelopers(e.target.value.split(', '))}
-      ></Input>
+      />
       <Input
         placeholder="Publishers - comma separated"
         defaultValue=""
@@ -131,7 +157,7 @@ export const AddGameForm = () => {
         borderColor="black"
         borderRadius={1}
         onChange={(e) => setPublishers(e.target.value.split(', '))}
-      ></Input>
+      />
 
       {/* Selectors - Can't be bothered separated the text and yadaayaddeedooo into components */}
 
