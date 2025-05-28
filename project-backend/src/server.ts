@@ -16,6 +16,7 @@ import adminRoutes from './routes/admin.route';
 import publicRoutes from './routes/public.route';
 import cookieParser from 'cookie-parser';
 import { injectUserIntoView } from './middleware/authMiddleware';
+import { Game } from './data/models/Game';
 
 const app: Express = express();
 app.use(express.json());
@@ -33,10 +34,30 @@ const PORT: number = parseInt(process.env.PORT || config.port) || 6900;
 const HOST: string = process.env.IP || '127.0.0.1';
 const SERVER_URL: string = `${HOST}:${PORT}`;
 
+async function updateImageFields() {
+  try {
+    const docs = await Game.find({ image: { $exists: true } });
+
+    for (const doc of docs) {
+      await Game.updateOne(
+        { _id: doc._id },
+        {
+          $unset: { image: '' },
+          $set: { images: { cardImage: '', contentImage: '' } },
+        }
+      );
+    }
+
+    console.log('Updated all image fields.');
+  } catch (err) {
+    console.error('Error updating images:', err);
+  }
+}
+
 connectToDatabase().then(() => {
   console.log('Connected to database\n');
   app.get('*', injectUserIntoView);
-
+updateImageFields()
   app.use('/api/admin/', adminRoutes);
   app.use('/api/user/auth', authRoutes);
   app.use('/api/user/', userRoutes);

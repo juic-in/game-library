@@ -25,12 +25,15 @@ const userReviewSchema = new Schema(
 interface IGame extends Document {
   name: string;
   description: string;
-  reviews: IGameReviews
+  reviews: IGameReviews;
   genres: string[];
   releaseDate: string;
   developer: string;
   publisher: string;
-  image: string;
+  images: {
+    cardImage: string;
+    contentImage: string;
+  };
   priceCents: number;
   platforms: string[];
   tags: string[];
@@ -45,7 +48,10 @@ const gameSchema: Schema = new Schema(
     releaseDate: { type: Date, default: Date.now },
     developers: { type: [String], default: 'Unknown' },
     publishers: { type: [String], default: 'Unknown' },
-    image: { type: String, default: '' },
+    images: {
+      cardImage: { type: String, default: '' },
+      contentImage: { type: String, default: '' },
+    },
     priceCents: { type: Number, default: 0 },
     platforms: { type: [String], default: [] },
     tags: { type: [String], default: [] },
@@ -57,7 +63,9 @@ const gameSchema: Schema = new Schema(
 
 gameSchema.post('save', (doc, next) => {
   console.log(
-    `[Log - ${new Date().toISOString()}] The game with the id of (${doc._id}) has been created/updated and saved`
+    `[Log - ${new Date().toISOString()}] The game with the id of (${
+      doc._id
+    }) has been created/updated and saved`
   );
   next();
 });

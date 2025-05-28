@@ -15,7 +15,10 @@ export interface User {
 export interface InitialGame {
   name: string;
   description: string;
-  image: string;
+  images: {
+    cardImage: string;
+    contentImage: string;
+  };
   releaseDate: Date;
   priceCents: number;
   developers: string[];
