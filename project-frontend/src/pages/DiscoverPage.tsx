@@ -43,7 +43,7 @@ export const DiscoverPage = () => {
     }
     const { status } = response;
     const { data } = response.payload;
-    console.log(data)
+
     switch (status) {
       case 200:
         const keysToKeep = ['_id', 'name', 'description', 'images'];
