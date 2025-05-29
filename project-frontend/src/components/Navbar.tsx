@@ -76,9 +76,9 @@ export const Navbar = ({ toggleSidebar }: Props) => {
 
           {/* Logo (centered) */}
           <Text
-            position={'absolute'}
-            left={'50%'}
-            transform={'translateX(-50%)'}
+            position='fixed'
+            left='50%'
+            transform='translateX(-50%)'
             fontSize={{ base: '22', sm: '28' }}
             fontWeight={'bold'}
             textTransform={'uppercase'}
