@@ -1,3 +1,10 @@
+export enum ContentStates {
+  Store = 'Store',
+  Info = 'Info',
+  Reviews = 'Reviews',
+  Discussions = 'Discussions'
+}
+
 export enum Genres {
   Action = 'Action',
   ActionAdventure = 'Action-Adventure',
