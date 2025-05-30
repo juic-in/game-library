@@ -4,6 +4,9 @@ import {
   addToUserFriends,
   addToUserLib,
   addToUserWishlist,
+  checkGameInWishlist,
+  checkGameIsOwned,
+  checkIsFriended,
   getUserFriends,
   getUserGames,
   getUserWishlist,
@@ -16,22 +19,30 @@ const router = express.Router();
 
 router.use(requireUserAuth);
 
-router.post('games/:gameId', addToUserLib);
+router.post('/games/:gameId', addToUserLib);
 
-router.delete('games/:gameId', removeFromUserLib);
+router.delete('/games/:gameId', removeFromUserLib);
 
-router.post('games/:gameId/wishlist', addToUserWishlist);
+router.post('/wishlist/:gameId', addToUserWishlist);
 
-router.delete('games/:gameId/wishlist', removeFromUserWishlist);
+router.delete('/wishlist/:gameId', removeFromUserWishlist);
 
-router.post('/:userId/friends', addToUserFriends);
+router.post('/friends/:friendId', addToUserFriends);
 
-router.delete('/:userId/friends', removeFromUserFriends);
+router.delete('/friends/:friendId', removeFromUserFriends);
 
 router.get('/games', getUserGames);
 
 router.get('/wishlist', getUserWishlist);
 
 router.get('/friends', getUserFriends);
+
+// check routes
+
+router.get('/check/games/:gameId', checkGameIsOwned);
+
+router.get('/check/wishlist/:gameId', checkGameInWishlist);
+
+router.get('/check/friends/:friendId', checkIsFriended);
 
 export default router;

@@ -58,9 +58,9 @@ connectToDatabase().then(() => {
   console.log('Connected to database\n');
   app.get('*', injectUserIntoView);
   app.use('/api/admin/', adminRoutes);
-  app.use('/api/user/auth', authRoutes);
+  app.use('/api/user/auth/', authRoutes);
   app.use('/api/user/', userRoutes);
-  app.use('/api/public', publicRoutes);
+  app.use('/api/public/', publicRoutes);
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error('Global error:', err);
