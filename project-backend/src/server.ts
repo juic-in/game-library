@@ -57,7 +57,6 @@ async function updateImageFields() {
 connectToDatabase().then(() => {
   console.log('Connected to database\n');
   app.get('*', injectUserIntoView);
-updateImageFields()
   app.use('/api/admin/', adminRoutes);
   app.use('/api/user/auth', authRoutes);
   app.use('/api/user/', userRoutes);

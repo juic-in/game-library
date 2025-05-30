@@ -11,18 +11,35 @@ export const userAddGameToWishlist = async (userId: string, gameId: string) => {
   } else if (!game) {
     throw new BadRequestError('Invalid Game');
   }
+  if (await User.findOne({ _id, 'wishlist.items': gameId }))
+    throw new BadRequestError('Game is already wishlisted');
 
   await User.updateOne(
     {
       _id,
     },
     {
-      $push: { wishlist: { game: game._id } },
+      $push: { 'wishlist.items': { game: game._id } },
     }
   );
 
   return {};
 };
+
+export const userCheckGameInWishlist = async (
+  userId: string,
+  gameId: string
+) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+
+  if (_id) throw new UnauthorizedError('Invalid User');
+  if (!game) throw new BadRequestError('Invalid Game');
+
+  if (await User.findOne({ _id, 'wishlist.items': gameId }))
+    throw new BadRequestError('Game is already wishlisted');
+};
+
 export const userRemoveGameFromWishlist = async (
   userId: string,
   gameId: string
@@ -40,7 +57,7 @@ export const userRemoveGameFromWishlist = async (
       _id,
     },
     {
-      $pull: { wishlist: { game: game._id } },
+      $pull: { 'wishlist.items': { game: game._id } },
     }
   );
 
@@ -58,17 +75,32 @@ export const userAddGameToOwnedGames = async (
     throw new BadRequestError('Invalid Game');
   }
 
+  if (await User.findOne({ _id, 'ownedGames.items': gameId }))
+    throw new BadRequestError('Game is already owned');
+
   await User.updateOne(
     {
       _id,
     },
     {
-      $push: { ownedGames: { game: game._id } },
+      $push: { 'ownedGames.items': { game: game._id } },
     }
   );
 
   return {};
 };
+
+export const userCheckGameIsOwned = async (userId: string, gameId: string) => {
+  const { _id } = await findUserById(userId);
+  const game = await findGameById(gameId);
+
+  if (_id) throw new UnauthorizedError('Invalid User');
+  if (!game) throw new BadRequestError('Invalid Game');
+
+  if (await User.findOne({ _id, 'ownedGames.items': gameId }))
+    throw new BadRequestError('Game is already owned');
+};
+
 export const userRemoveGameFromOwnedGames = async (
   userId: string,
   gameId: string
@@ -86,7 +118,7 @@ export const userRemoveGameFromOwnedGames = async (
       _id,
     },
     {
-      $pull: { ownedGames: { game: game._id } },
+      $pull: { 'ownedGames.items': { game: game._id } },
     }
   );
 
@@ -95,63 +127,63 @@ export const userRemoveGameFromOwnedGames = async (
 export const userAddFriend = async (userId: string, friendId: string) => {
   const { _id } = await findUserById(userId);
   const friend = await findUserById(friendId);
-  if (!_id) {
-    throw new UnauthorizedError('Invalid User');
-  } else if (await User.findOne({
-    friends: friendId
-  })) {
-    throw new BadRequestError('This user is already your friend')
-  }
+  if (!_id || !friend) throw new UnauthorizedError('Invalid User');
+
+  if (await User.findOne({ 'friends.items': friendId }))
+    throw new BadRequestError('This user is already your friend');
 
   await User.updateOne(
     {
       _id,
     },
     {
-      $push: { friends: { friend: friend._id}}
+      $push: { 'friends.items': { friend: friendId } },
     }
-  )
-}
+  );
+};
+
+export const userCheckIsFriended = async (userId: string, friendId: string) => {
+  const { _id } = await findUserById(userId);
+  const friend = await findUserById(friendId);
+  if (!_id || !friend) throw new UnauthorizedError('Invalid User');
+
+  if (await User.findOne({ 'friends.items': friendId }))
+    throw new BadRequestError('This user is already your friend');
+};
+
 export const userRemoveFriend = async (userId: string, friendId: string) => {
   const { _id } = await findUserById(userId);
   const friend = await findUserById(friendId);
-  if (!_id) {
-    throw new UnauthorizedError('Invalid User');
-  } else if (!await User.findOne({
-    friends: friendId
-  })) {
-    throw new BadRequestError('This user not your friend')
-  }
+    if (!_id || !friend) throw new UnauthorizedError('Invalid User');
 
   await User.updateOne(
     {
       _id,
     },
     {
-      $pull: { friends: { friend: friend._id}}
+      $pull: { 'friend.items': { friend: friendId } },
     }
-  )
-}
+  );
+};
 
 export const userGetOwnedGames = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new UnauthorizedError('Invalid User')
+    throw new UnauthorizedError('Invalid User');
   }
   return user.ownedGames.items;
-}
+};
 export const userGetWishlist = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new UnauthorizedError('Invalid User')
+    throw new UnauthorizedError('Invalid User');
   }
   return user.wishlist.items;
-}
+};
 export const userGetFriends = async (userId: string) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new UnauthorizedError('Invalid User')
+    throw new UnauthorizedError('Invalid User');
   }
   return user.friends.items;
-}
-
+};

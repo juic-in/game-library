@@ -3,6 +3,9 @@ import {
   userAddFriend,
   userAddGameToOwnedGames,
   userAddGameToWishlist,
+  userCheckGameInWishlist,
+  userCheckGameIsOwned,
+  userCheckIsFriended,
   userGetFriends,
   userGetOwnedGames,
   userGetWishlist,
@@ -11,6 +14,57 @@ import {
   userRemoveGameFromWishlist,
 } from './users';
 import { AuthenticatedRequest } from '../../middleware/authMiddleware';
+
+/**
+ * Routes maining for user interactions
+ * - Check routes are used for conditionally rendering the frontend, as such will
+ *   only contain the check component of the other routes.
+ */
+
+export const checkGameInWishlist = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { gameId } = req.params;
+    const result = await userCheckGameInWishlist(req.user._id, gameId);
+    res.status(200).json({ success: true, data: 'Not wished' });
+  } catch (error) {
+    res
+      .status(error.statusCode || 500)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const checkGameIsOwned = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { gameId } = req.params;
+    const result = await userCheckGameIsOwned(req.user._id, gameId);
+    res.status(200).json({ success: true, data: 'Not owned' });
+  } catch (error) {
+    res
+      .status(error.statusCode || 500)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const checkIsFriended = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { friendId } = req.params;
+    const result = await userCheckIsFriended(req.user._id, friendId);
+    res.status(200).json({ success: true, data: 'Not friended' });
+  } catch (error) {
+    res
+      .status(error.statusCode || 500)
+      .json({ success: false, error: error.message });
+  }
+};
 
 export const addToUserLib = async (
   req: AuthenticatedRequest,
@@ -77,8 +131,8 @@ export const addToUserFriends = async (
   res: Response
 ) => {
   try {
-    const { gameId } = req.params;
-    const result = await userAddFriend(req.user._id, gameId);
+    const { friendId } = req.params;
+    const result = await userAddFriend(req.user._id, friendId);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     res
@@ -92,8 +146,8 @@ export const removeFromUserFriends = async (
   res: Response
 ) => {
   try {
-    const { gameId } = req.params;
-    const result = await userRemoveFriend(req.user._id, gameId);
+    const { friendId } = req.params;
+    const result = await userRemoveFriend(req.user._id, friendId);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     res
