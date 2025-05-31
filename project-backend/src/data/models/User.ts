@@ -71,12 +71,21 @@ export interface UserProfile {
   reviews?: IUserReviews[];
 }
 
-const userGameRefItemSchema = new Schema(
+const userOwnedGameRefItemSchema = new Schema(
+  {
+    game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
+    playtime: { type: Number, required: true, default: 0 },
+    // most recent review rating??
+  },
+  { _id: false, timestamps: true }
+); // prevent extra _id in subdocuments
+
+const userWishedGameRefItemSchema = new Schema(
   {
     game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: true },
   },
   { _id: false, timestamps: true }
-); // prevent extra _id in subdocuments
+); 
 
 const userFriendSchema = new Schema(
   {
@@ -102,7 +111,7 @@ const userReviewSchema = new Schema(
 
 const userOwnedGameSchema = new Schema<IUserOwnedGames>(
   {
-    items: [userGameRefItemSchema],
+    items: [userOwnedGameRefItemSchema],
     public: { type: Boolean, default: true },
   },
   { _id: false }
@@ -110,7 +119,7 @@ const userOwnedGameSchema = new Schema<IUserOwnedGames>(
 
 const userWishlistSchema = new Schema<IUserWishlist>(
   {
-    items: [userGameRefItemSchema],
+    items: [userWishedGameRefItemSchema],
     public: { type: Boolean, default: true },
   },
   { _id: false }
