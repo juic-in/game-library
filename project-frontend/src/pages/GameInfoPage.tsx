@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useModal } from '../context/ModalProvider';
 import { getGameData } from '../api/game';
 import { Game } from '../interface';
-import { Navigate, redirect, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  Box,
   Button,
   Flex,
   Heading,
@@ -13,8 +12,8 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { ContentStates } from '../enums';
-import { GameSelector } from '../components/Selectors/GameSelector';
 import { GameInfo } from '../components/Content-States/GameInfo';
+import { GameStore } from '../components/Content-States/GameStore';
 
 export const GameInfoPage = () => {
   const [game, setGame] = useState<Game | null>(null);
@@ -69,7 +68,9 @@ export const GameInfoPage = () => {
   const renderContent = () => {
     switch (contentState) {
       case ContentStates.Info:
-        return game ? <GameInfo gameData={game} /> : null;
+        return game ? <GameInfo game={game} /> : null;
+      case ContentStates.Store:
+        return game ? <GameStore game={game} /> : null;
     }
   };
 

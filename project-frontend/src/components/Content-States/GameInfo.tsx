@@ -9,10 +9,10 @@ import {
 import { Game } from '../../interface';
 
 interface Props {
-  gameData: Game;
+  game: Game;
 }
 
-export const GameInfo = ({ gameData }: Props) => {
+export const GameInfo = ({ game }: Props) => {
   const {
     name,
     description,
@@ -22,7 +22,7 @@ export const GameInfo = ({ gameData }: Props) => {
     genres,
     platforms,
     tags,
-  } = gameData;
+  } = game;
   const bgColor = useColorModeValue('gray.100', 'gray.700');
 
   // Use userefs for scroll into view

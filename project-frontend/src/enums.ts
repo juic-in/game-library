@@ -1,8 +1,14 @@
 export enum ContentStates {
-  Store = 'Store',
   Info = 'Info',
+  Store = 'Store',
   Reviews = 'Reviews',
-  Discussions = 'Discussions'
+  Discussions = 'Discussions',
+}
+
+export enum GameOwnedState {
+  NotOwned = 'Not Owned',
+  Owned = "Owned",
+  Wishlisted = "Wishlisted"
 }
 
 export enum Genres {
