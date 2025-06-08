@@ -28,7 +28,7 @@ export const checkGameInWishlist = async (
   try {
     const { gameId } = req.params;
     const result = await userCheckGameInWishlist(req.user._id, gameId);
-    res.status(200).json({ success: true, data: 'Not wished' });
+    res.status(200).json({ success: true, data: 'Wished' });
   } catch (error) {
     res
       .status(error.statusCode || 500)
@@ -43,7 +43,7 @@ export const checkGameIsOwned = async (
   try {
     const { gameId } = req.params;
     const result = await userCheckGameIsOwned(req.user._id, gameId);
-    res.status(200).json({ success: true, data: 'Not owned' });
+    res.status(200).json({ success: true, data: 'Owned' });
   } catch (error) {
     res
       .status(error.statusCode || 500)
@@ -58,7 +58,7 @@ export const checkIsFriended = async (
   try {
     const { friendId } = req.params;
     const result = await userCheckIsFriended(req.user._id, friendId);
-    res.status(200).json({ success: true, data: 'Not friended' });
+    res.status(200).json({ success: true, data: 'Friended' });
   } catch (error) {
     res
       .status(error.statusCode || 500)

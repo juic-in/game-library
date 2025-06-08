@@ -3,18 +3,40 @@ import { Game } from '../../interface';
 import { useAuth, User } from '../../context/AuthProvider';
 import { GameOwnedState } from '../../enums';
 import { useEffect, useState } from 'react';
+import { useModal } from '../../context/ModalProvider';
+import { checkIfOwned, checkIfWished } from '../../api/users';
 
 interface Props {
   game: Game;
 }
 
-const checkWishlistState = async (userId, gameId) => {
-  // call wishlist verify route
+const { openErrorModal } = useModal();
+
+const checkWishlistState = async (gameId: string) => {
+  try {
+    const response = await checkIfWished(gameId);
+    if ('error' in response) {
+      openErrorModal(response.error);
+      return
+    }
+    if (response.payload.success) return true
+  } catch (error) {
+    openErrorModal('Unexpected Error')
+  }
   return false;
 };
 
-const checkOwnedState = async (userId, gameId) => {
-  // call ownedGames verify route
+const checkOwnedState = async (gameId: string) => {
+  try {
+    const response = await checkIfOwned(gameId);
+    if ('error' in response) {
+      openErrorModal(response.error);
+      return
+    }
+    if (response.payload.success) return true
+  } catch (error) {
+    openErrorModal('Unexpected Error')
+  }
   return false;
 };
 
@@ -33,7 +55,7 @@ export const GameStore = ({ game }: Props) => {
 
   useEffect(() => {
     const initialiseState = async () => {
-      const ownedState = await checkOwnedState(userId, gameId);
+      const ownedState = await checkOwnedState(gameId);
       if (!ownedState) {
         setGameOwnershipState(GameOwnedState.NotOwned);
       } else {
@@ -42,7 +64,7 @@ export const GameStore = ({ game }: Props) => {
       }
 
       // Determine if wishlisted or not
-      const wishlistState = await checkWishlistState(userId, gameId);
+      const wishlistState = await checkWishlistState(gameId);
       if (wishlistState) setGameOwnershipState(GameOwnedState.Wishlisted);
     };
     initialiseState();

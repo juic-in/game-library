@@ -12,7 +12,7 @@ export const userCheckGameIsOwned = async (userId: string, gameId: string) => {
   if (!game) throw new BadRequestError('Invalid Game');
 
   if (!(await User.findOne({ _id, 'ownedGames.items': gameId })))
-    throw new BadRequestError('Game is already owned');
+    throw new BadRequestError('Game not owned');
 
   return {};
 };
@@ -39,7 +39,7 @@ export const userCheckIsFriended = async (userId: string, friendId: string) => {
   if (!_id || !friend) throw new UnauthorizedError('Invalid User');
 
   if (!(await User.findOne({ 'friends.items': friendId })))
-    throw new BadRequestError('This user is already your friend');
+    throw new BadRequestError('This user is not your friend');
 
   return {};
 };
@@ -53,7 +53,7 @@ export const userAddGameToWishlist = async (userId: string, gameId: string) => {
     throw new BadRequestError('Invalid Game');
   }
   if (await User.findOne({ _id, 'wishlist.items': gameId }))
-    throw new BadRequestError('Game is already wishlisted');
+    throw new BadRequestError('Game is not wishlisted');
 
   await User.updateOne(
     {
